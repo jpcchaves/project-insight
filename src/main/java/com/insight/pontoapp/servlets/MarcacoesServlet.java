@@ -1,10 +1,15 @@
 package com.insight.pontoapp.servlets;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.insight.pontoapp.data.MarcacoesData;
 import com.insight.pontoapp.data.PeriodoPontoData;
 import com.insight.pontoapp.domain.DTO.MarcacaoRequestDTO;
+import com.insight.pontoapp.domain.DTO.MarcacaoResponseDTO;
 import com.insight.pontoapp.domain.models.Marcacao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,8 +19,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +35,11 @@ public class MarcacoesServlet extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        objectMapper.setDateFormat(new SimpleDateFormat("HH:mm"));
+
+        objectMapper.registerModule(new SimpleModule().addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter)));
 
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         MarcacaoRequestDTO marcacaoJson = objectMapper.readValue(requestBody, MarcacaoRequestDTO.class);
@@ -54,38 +66,43 @@ public class MarcacoesServlet extends HttpServlet {
         out.print(buildJsonResponse(MarcacoesData.getMarcacoesData()));
     }
 
-    
+
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        objectMapper.setDateFormat(new SimpleDateFormat("HH:mm"));
+
+        objectMapper.registerModule(new SimpleModule().addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter)));
+
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(buildJsonResponse(MarcacoesData.getMarcacoesData()));
+
+        List<MarcacaoResponseDTO> marcacaoResponseDTO = new ArrayList<>();
+
+        MarcacoesData
+                .getMarcacoesData()
+                .forEach(
+                        marcacao -> marcacaoResponseDTO.add(
+                                new MarcacaoResponseDTO(
+                                        marcacao.getId(),
+                                        marcacao.getEntradaManha(),
+                                        marcacao.getSaidaManha(),
+                                        marcacao.getEntradaTarde(),
+                                        marcacao.getSaidaTarde(),
+                                        marcacao.getAtrasoFormatado(),
+                                        marcacao.getHoraExtraFormatada())
+                        )
+                );
+
+        out.print(buildJsonResponse(marcacaoResponseDTO));
     }
 
 
-    private String buildJsonResponse(List<Marcacao> marcacoes) {
-        StringBuilder json = new StringBuilder();
-        json.append("[");
-
-        for (Marcacao marcacao : marcacoes) {
-            json.append("{");
-            json.append("\"id\": \"").append(marcacao.getId()).append("\", ");
-            json.append("\"inicioManha\": \"").append(marcacao.getEntradaManha()).append("\", ");
-            json.append("\"saidaManha\": \"").append(marcacao.getSaidaManha()).append("\", ");
-            json.append("\"inicioTarde\": \"").append(marcacao.getEntradaTarde()).append("\", ");
-            json.append("\"saidaTarde\": \"").append(marcacao.getSaidaTarde()).append("\", ");
-            json.append("\"atraso\": \"").append(marcacao.getAtrasoFormatado()).append("\", ");
-            json.append("\"horaExtra\": \"").append(marcacao.getHoraExtraFormatada()).append("\"");
-            json.append("},");
-        }
-
-        if (!marcacoes.isEmpty()) {
-            json.setLength(json.length() - 1);
-        }
-
-        json.append("]");
-
-        return json.toString();
+    private <T> String buildJsonResponse(T valueToConvert) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(valueToConvert);
     }
 }
