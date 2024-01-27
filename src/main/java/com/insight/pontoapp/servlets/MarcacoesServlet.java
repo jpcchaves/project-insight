@@ -86,10 +86,25 @@ public class MarcacoesServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(jsonUtils.buildJsonResponse(buildMarcacaoResponseDTO()));
+
+        String marcacaoId = request.getParameter("id");
+
+        if (marcacaoId != null && !marcacaoId.isEmpty()) {
+            Marcacao marcacao = findById(UUID.fromString(marcacaoId));
+            out.print(jsonUtils.buildJsonResponse(buildMarcacaoDTO(marcacao)));
+            return;
+        }
+
+        out.print(jsonUtils.buildJsonResponse(buildMarcacaoResponseDTOList()));
     }
 
-    private List<MarcacaoResponseDTO> buildMarcacaoResponseDTO() {
+    protected void doDelete(HttpServletRequest request,
+                            HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.print("");
+    }
+
+    private List<MarcacaoResponseDTO> buildMarcacaoResponseDTOList() {
         List<MarcacaoResponseDTO> marcacaoResponseDTO = new ArrayList<>();
 
         MarcacoesData
@@ -108,6 +123,18 @@ public class MarcacoesServlet extends HttpServlet {
                 );
 
         return marcacaoResponseDTO;
+    }
+
+    private MarcacaoResponseDTO buildMarcacaoDTO(Marcacao marcacao) {
+        return new MarcacaoResponseDTO(
+                marcacao.getId(),
+                marcacao.getEntradaManha(),
+                marcacao.getSaidaManha(),
+                marcacao.getEntradaTarde(),
+                marcacao.getSaidaTarde(),
+                marcacao.getAtrasoFormatado(),
+                marcacao.getHoraExtraFormatada()
+        );
     }
 
     private Marcacao findById(UUID id) {
