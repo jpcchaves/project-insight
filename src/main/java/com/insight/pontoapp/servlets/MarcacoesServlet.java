@@ -101,7 +101,14 @@ public class MarcacoesServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request,
                             HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        out.print("");
+
+
+        String marcacaoId = request.getParameter("id");
+        UUID marcacaoUUID = UUID.fromString(marcacaoId);
+
+        deleteById(marcacaoUUID);
+
+        out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcacao apagada com sucesso!")));
     }
 
     private List<MarcacaoResponseDTO> buildMarcacaoResponseDTOList() {
@@ -150,5 +157,13 @@ public class MarcacoesServlet extends HttpServlet {
                 PeriodoPontoData.getPeriodoPonto().getSaidaManha() != null ||
                 PeriodoPontoData.getPeriodoPonto().getEntradaTarde() != null ||
                 PeriodoPontoData.getPeriodoPonto().getSaidaTarde() != null;
+    }
+
+    private void deleteById(UUID id) {
+        MarcacoesData
+                .getMarcacoesData()
+                .removeIf(marcacao ->
+                        marcacao.getId().equals(id)
+                );
     }
 }
