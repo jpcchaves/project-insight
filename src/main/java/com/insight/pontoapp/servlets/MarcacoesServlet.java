@@ -4,6 +4,7 @@ import com.insight.pontoapp.config.ObjectMapperConfig;
 import com.insight.pontoapp.data.MarcacoesData;
 import com.insight.pontoapp.data.PeriodoPontoData;
 import com.insight.pontoapp.domain.DTO.MarcacaoRequestDTO;
+import com.insight.pontoapp.domain.DTO.MarcacaoRequestUpdateDTO;
 import com.insight.pontoapp.domain.DTO.MarcacaoResponseDTO;
 import com.insight.pontoapp.domain.DTO.ServletMessageResponse;
 import com.insight.pontoapp.domain.models.Marcacao;
@@ -21,6 +22,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @WebServlet("/marcacoes")
@@ -60,6 +62,24 @@ public class MarcacoesServlet extends HttpServlet {
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcação registrada com sucesso!")));
     }
 
+    protected void doPut(HttpServletRequest request,
+                         HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+
+        String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+        MarcacaoRequestUpdateDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestUpdateDTO.class);
+
+        Marcacao marcacaoById = findById(marcacaoJson.getId());
+
+        marcacaoById.setEntradaManha(marcacaoJson.getEntradaManha());
+        marcacaoById.setSaidaManha(marcacaoJson.getSaidaManha());
+        marcacaoById.setEntradaTarde(marcacaoJson.getEntradaTarde());
+        marcacaoById.setSaidaTarde(marcacaoJson.getSaidaTarde());
+        marcacaoById.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
+
+        out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcacao editada com sucesso")));
+    }
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
@@ -88,6 +108,14 @@ public class MarcacoesServlet extends HttpServlet {
                 );
 
         return marcacaoResponseDTO;
+    }
+
+    private Marcacao findById(UUID id) {
+        return MarcacoesData
+                .getMarcacoesData()
+                .stream()
+                .filter(marcacao -> marcacao.getId().equals(id)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Marcacao nao encotrada com o ID informado"));
     }
 
     private boolean hasPeriodoPonto() {
