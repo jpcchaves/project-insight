@@ -6,6 +6,7 @@ import com.insight.pontoapp.data.MarcacoesData;
 import com.insight.pontoapp.data.PeriodoPontoData;
 import com.insight.pontoapp.domain.DTO.MarcacaoRequestDTO;
 import com.insight.pontoapp.domain.DTO.MarcacaoResponseDTO;
+import com.insight.pontoapp.domain.DTO.ServletMessageResponse;
 import com.insight.pontoapp.domain.models.Marcacao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,6 +31,10 @@ public class MarcacoesServlet extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
+        if (!hasPeriodoPonto()) {
+            throw new IllegalArgumentException("É necessário cadastrar o período do ponto antes de realizar uma marcação");
+        }
+
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         MarcacaoRequestDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestDTO.class);
 
@@ -47,10 +52,10 @@ public class MarcacoesServlet extends HttpServlet {
         MarcacoesData.getMarcacoesData().add(marcacao);
 
         marcacao.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
-        
+
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(buildJsonResponse(MarcacoesData.getMarcacoesData()));
+        out.print(mapperConfig.objectMapper().writeValueAsString(new ServletMessageResponse("Marcação registrada com sucesso!")));
     }
 
 
@@ -59,7 +64,15 @@ public class MarcacoesServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
+        out.print(buildJsonResponse(buildMarcacaoResponseDTO()));
+    }
 
+
+    private <T> String buildJsonResponse(T valueToConvert) throws JsonProcessingException {
+        return mapperConfig.objectMapper().writeValueAsString(valueToConvert);
+    }
+
+    private List<MarcacaoResponseDTO> buildMarcacaoResponseDTO() {
         List<MarcacaoResponseDTO> marcacaoResponseDTO = new ArrayList<>();
 
         MarcacoesData
@@ -77,11 +90,13 @@ public class MarcacoesServlet extends HttpServlet {
                         )
                 );
 
-        out.print(buildJsonResponse(marcacaoResponseDTO));
+        return marcacaoResponseDTO;
     }
 
-
-    private <T> String buildJsonResponse(T valueToConvert) throws JsonProcessingException {
-        return mapperConfig.objectMapper().writeValueAsString(valueToConvert);
+    private boolean hasPeriodoPonto() {
+        return PeriodoPontoData.getPeriodoPonto().getEntradaManha() != null ||
+                PeriodoPontoData.getPeriodoPonto().getSaidaManha() != null ||
+                PeriodoPontoData.getPeriodoPonto().getEntradaTarde() != null ||
+                PeriodoPontoData.getPeriodoPonto().getSaidaTarde() != null;
     }
 }
