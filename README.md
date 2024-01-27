@@ -31,3 +31,13 @@
             </p>
         </li>
     </ol>
+    
+ <h1>Implantando Frontend</h1>
+    <ol>
+        <li>
+            <p>
+                Para rodar o frontend, vá até a pasta <code>pontoapp-front</code> no diretório clonado e abra o arquivo <code>index.html</code> no seu navegador de preferência (recomendado: Google Chrome ou Firefox).
+            </p>
+            <pre><code>cd pontoapp-front</code></pre>
+        </li>
+    </ol>
