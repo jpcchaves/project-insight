@@ -1,6 +1,5 @@
 package com.insight.pontoapp.servlets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.insight.pontoapp.config.ObjectMapperConfig;
 import com.insight.pontoapp.data.MarcacoesData;
 import com.insight.pontoapp.data.PeriodoPontoData;
@@ -8,6 +7,8 @@ import com.insight.pontoapp.domain.DTO.MarcacaoRequestDTO;
 import com.insight.pontoapp.domain.DTO.MarcacaoResponseDTO;
 import com.insight.pontoapp.domain.DTO.ServletMessageResponse;
 import com.insight.pontoapp.domain.models.Marcacao;
+import com.insight.pontoapp.utils.JsonUtils;
+import com.insight.pontoapp.utils.JsonUtilsImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @WebServlet("/marcacoes")
 public class MarcacoesServlet extends HttpServlet {
     private static final long serialVersionUID = 7302329288889146232L;
+    private final JsonUtils jsonUtils = new JsonUtilsImpl();
     private final ObjectMapperConfig mapperConfig = new ObjectMapperConfig();
 
     protected void doPost(HttpServletRequest request,
@@ -55,7 +57,7 @@ public class MarcacoesServlet extends HttpServlet {
 
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(mapperConfig.objectMapper().writeValueAsString(new ServletMessageResponse("Marcação registrada com sucesso!")));
+        out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcação registrada com sucesso!")));
     }
 
 
@@ -64,12 +66,7 @@ public class MarcacoesServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(buildJsonResponse(buildMarcacaoResponseDTO()));
-    }
-
-
-    private <T> String buildJsonResponse(T valueToConvert) throws JsonProcessingException {
-        return mapperConfig.objectMapper().writeValueAsString(valueToConvert);
+        out.print(jsonUtils.buildJsonResponse(buildMarcacaoResponseDTO()));
     }
 
     private List<MarcacaoResponseDTO> buildMarcacaoResponseDTO() {
