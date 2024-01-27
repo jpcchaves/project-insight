@@ -34,7 +34,7 @@
 
             <div class="card-body">
               <div class="form-group">
-                <label for="entradaManha">Inicio manhã</label>
+                <label for="">Inicio manhã</label>
                 <input
                   type="time"
                   class="form-control"
@@ -196,6 +196,8 @@
               <th>Saida Manha</th>
               <th>Entrada Tarde</th>
               <th>Saida Tarde</th>
+              <th>Atraso</th>
+              <th>Hora Extra</th>
               <th>Editar</th>
               <th>Excluir</th>
             </thead>
@@ -357,7 +359,7 @@
         }, TWO_SECONDS_IN_MILLIS);
       }
 
-      function editMarcacao(id) {
+      function getEditMarcacao(id) {
         fetch("http://localhost:8080/pontoapp/marcacoes?id=" + id, {
           method: "GET",
         })
@@ -397,11 +399,11 @@
           });
       }
 
-      function editMarcacao() {
+      async function editMarcacao() {
         var formData = getMarcacoesFormData();
         formData["id"] = editMarcacaoFormData.id;
 
-        fetch("http://localhost:8080/pontoapp/marcacoes", {
+        await fetch("http://localhost:8080/pontoapp/marcacoes", {
           method: "PUT",
           body: JSON.stringify(formData),
         })
@@ -438,14 +440,16 @@
               tmpData += "<td>" + marcacao.saidaManha + "</td>";
               tmpData += "<td>" + marcacao.entradaTarde + "</td>";
               tmpData += "<td>" + marcacao.saidaTarde + "</td>";
+              tmpData += "<td>" + marcacao.atraso + "</td>";
+              tmpData += "<td>" + marcacao.horaExtra + "</td>";
               tmpData +=
-                "<td><button class='btn btn-primary' onclick='editMarcacao(`" +
+                "<td><button class='btn btn-primary' onclick='getEditMarcacao(`" +
                 marcacao.id +
-                "`)'>Edit</button></td>";
+                "`)'>Editar</button></td>";
               tmpData +=
                 "<td><button class='btn btn-danger' onclick='deleteMarcacao(`" +
                 marcacao.id +
-                "`)'>Delete</button></td>";
+                "`)'>Deletar</button></td>";
 
               tmpData += "</tr>";
             });
