@@ -34,6 +34,7 @@ public class MarcacoesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
 
         if (!hasPeriodoPonto()) {
             throw new IllegalArgumentException("É necessário cadastrar o período do ponto antes de realizar uma marcação");
@@ -58,14 +59,20 @@ public class MarcacoesServlet extends HttpServlet {
         marcacao.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
 
         response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_CREATED);
         PrintWriter out = response.getWriter();
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcação registrada com sucesso!")));
     }
 
     protected void doPut(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
         response.setContentType("application/json");
+
+        PrintWriter out = response.getWriter();
 
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         MarcacaoRequestUpdateDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestUpdateDTO.class);
@@ -85,6 +92,8 @@ public class MarcacoesServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
         PrintWriter out = response.getWriter();
 
         String marcacaoId = request.getParameter("id");
@@ -101,14 +110,25 @@ public class MarcacoesServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request,
                             HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-
+        response.addHeader("Access-Control-Allow-Origin", "*");
 
         String marcacaoId = request.getParameter("id");
         UUID marcacaoUUID = UUID.fromString(marcacaoId);
 
         deleteById(marcacaoUUID);
 
+        response.setContentType("application/json");
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcacao apagada com sucesso!")));
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     private List<MarcacaoResponseDTO> buildMarcacaoResponseDTOList() {
@@ -153,10 +173,10 @@ public class MarcacoesServlet extends HttpServlet {
     }
 
     private boolean hasPeriodoPonto() {
-        return PeriodoPontoData.getPeriodoPonto().getEntradaManha() != null ||
-                PeriodoPontoData.getPeriodoPonto().getSaidaManha() != null ||
-                PeriodoPontoData.getPeriodoPonto().getEntradaTarde() != null ||
-                PeriodoPontoData.getPeriodoPonto().getSaidaTarde() != null;
+        return PeriodoPontoData.getPeriodoPonto().getInicioManha() != null ||
+                PeriodoPontoData.getPeriodoPonto().getFimManha() != null ||
+                PeriodoPontoData.getPeriodoPonto().getInicioTarde() != null ||
+                PeriodoPontoData.getPeriodoPonto().getFimTarde() != null;
     }
 
     private void deleteById(UUID id) {

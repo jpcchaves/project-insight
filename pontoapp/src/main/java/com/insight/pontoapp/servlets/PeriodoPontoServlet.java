@@ -3,6 +3,7 @@ package com.insight.pontoapp.servlets;
 import com.insight.pontoapp.config.ObjectMapperConfig;
 import com.insight.pontoapp.data.PeriodoPontoData;
 import com.insight.pontoapp.domain.DTO.PeriodoPontoDTO;
+import com.insight.pontoapp.domain.DTO.ServletMessageResponse;
 import com.insight.pontoapp.domain.models.PeriodoPonto;
 import com.insight.pontoapp.utils.JsonUtils;
 import com.insight.pontoapp.utils.JsonUtilsImpl;
@@ -29,15 +30,18 @@ public class PeriodoPontoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.setContentType("application/json");
+
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         PeriodoPontoDTO periodoPontoJson = mapperConfig.objectMapper().readValue(requestBody, PeriodoPontoDTO.class);
 
         validateUserInput(periodoPontoJson);
 
-        String inicioManhaStr = periodoPontoJson.getEntradaManha().toString();
-        String saidaManhaStr = periodoPontoJson.getSaidaManha().toString();
-        String inicioTardeStr = periodoPontoJson.getEntradaTarde().toString();
-        String saidaTardeStr = periodoPontoJson.getSaidaTarde().toString();
+        String inicioManhaStr = periodoPontoJson.getInicioManha().toString();
+        String saidaManhaStr = periodoPontoJson.getFimManha().toString();
+        String inicioTardeStr = periodoPontoJson.getInicioTarde().toString();
+        String saidaTardeStr = periodoPontoJson.getFimTarde().toString();
 
         LocalTime inicioManha = LocalTime.parse(inicioManhaStr, DateTimeFormatter.ofPattern("HH:mm"));
         LocalTime saidaManha = LocalTime.parse(saidaManhaStr, DateTimeFormatter.ofPattern("HH:mm"));
@@ -48,24 +52,25 @@ public class PeriodoPontoServlet extends HttpServlet {
 
         PeriodoPontoData.setPeriodoPonto(periodoPonto);
 
-        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(jsonUtils.buildJsonResponse(PeriodoPontoData.getPeriodoPonto()));
+        out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Periodo do ponto salvo com sucesso!")));
     }
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         out.print(jsonUtils.buildJsonResponse(PeriodoPontoData.getPeriodoPonto()));
     }
 
     private void validateUserInput(PeriodoPontoDTO periodoPonto) {
-        if (Objects.isNull(periodoPonto.getEntradaManha()) ||
-                Objects.isNull(periodoPonto.getSaidaManha()) ||
-                Objects.isNull(periodoPonto.getEntradaTarde()) ||
-                Objects.isNull(periodoPonto.getSaidaTarde())
+        if (Objects.isNull(periodoPonto.getInicioManha()) ||
+                Objects.isNull(periodoPonto.getFimManha()) ||
+                Objects.isNull(periodoPonto.getInicioTarde()) ||
+                Objects.isNull(periodoPonto.getFimTarde())
         ) {
             throw new IllegalArgumentException("O período inicial e final da manhã e tarde são obrigatórios");
         }
