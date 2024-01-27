@@ -1,11 +1,7 @@
 package com.insight.pontoapp.servlets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.insight.pontoapp.config.ObjectMapperConfig;
 import com.insight.pontoapp.data.MarcacoesData;
 import com.insight.pontoapp.data.PeriodoPontoData;
 import com.insight.pontoapp.domain.DTO.MarcacaoRequestDTO;
@@ -19,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,20 +24,14 @@ import java.util.stream.Collectors;
 @WebServlet("/marcacoes")
 public class MarcacoesServlet extends HttpServlet {
     private static final long serialVersionUID = 7302329288889146232L;
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapperConfig mapperConfig = new ObjectMapperConfig();
 
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        objectMapper.setDateFormat(new SimpleDateFormat("HH:mm"));
-
-        objectMapper.registerModule(new SimpleModule().addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter)));
 
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-        MarcacaoRequestDTO marcacaoJson = objectMapper.readValue(requestBody, MarcacaoRequestDTO.class);
+        MarcacaoRequestDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestDTO.class);
 
         String entradaStr = marcacaoJson.getEntradaManha().toString();
         String saidaStr = marcacaoJson.getSaidaManha().toString();
@@ -58,9 +47,7 @@ public class MarcacoesServlet extends HttpServlet {
         MarcacoesData.getMarcacoesData().add(marcacao);
 
         marcacao.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
-
-        request.setAttribute("marcacoes", MarcacoesData.getMarcacoesData());
-
+        
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         out.print(buildJsonResponse(MarcacoesData.getMarcacoesData()));
@@ -70,14 +57,6 @@ public class MarcacoesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        objectMapper.setDateFormat(new SimpleDateFormat("HH:mm"));
-
-        objectMapper.registerModule(new SimpleModule().addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter)));
-
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
@@ -103,6 +82,6 @@ public class MarcacoesServlet extends HttpServlet {
 
 
     private <T> String buildJsonResponse(T valueToConvert) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(valueToConvert);
+        return mapperConfig.objectMapper().writeValueAsString(valueToConvert);
     }
 }
