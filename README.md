@@ -27,7 +27,7 @@
                 <a href="http://localhost:8080/pontoapp/" target="_blank">http://localhost:8080/pontoapp/</a>
             </p>
             <p>
-               Se estiver funcionando, aparecera uma pagina com o error 404 do Tomcat.
+               Se estiver funcionando, aparecera a pagina inicial do Tomcat dizendo: If you're seeing this, you've successfully installed Tomcat. Congratulations!
             </p>
         </li>
     </ol>
