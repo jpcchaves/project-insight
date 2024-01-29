@@ -32,6 +32,7 @@ public class PeriodoPontoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json");
+        validatePeriodoPontoLimit();
 
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         PeriodoPontoDTO periodoPontoJson = mapperConfig.objectMapper().readValue(requestBody, PeriodoPontoDTO.class);
@@ -50,7 +51,7 @@ public class PeriodoPontoServlet extends HttpServlet {
 
         PeriodoPonto periodoPonto = new PeriodoPonto(inicioManha, saidaManha, inicioTarde, saidaTarde);
 
-        PeriodoPontoData.setPeriodoPonto(periodoPonto);
+        PeriodoPontoData.getPeriodoPonto().add(periodoPonto);
 
         PrintWriter out = response.getWriter();
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Periodo do ponto salvo com sucesso!")));
@@ -64,6 +65,14 @@ public class PeriodoPontoServlet extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         out.print(jsonUtils.buildJsonResponse(PeriodoPontoData.getPeriodoPonto()));
+    }
+
+    private void validatePeriodoPontoLimit() {
+        int PERIODO_PONTO_MAX_LIMIT = 3;
+
+        if(PeriodoPontoData.getPeriodoPonto().size() >= PERIODO_PONTO_MAX_LIMIT) {
+            throw new IllegalArgumentException("Limite de periodos atingido!");
+        }
     }
 
     private void validateUserInput(PeriodoPontoDTO periodoPonto) {
