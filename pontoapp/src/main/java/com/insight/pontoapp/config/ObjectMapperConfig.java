@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
