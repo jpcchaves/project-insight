@@ -1,235 +1,162 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PontoAPP</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <style>
-      body {
-        background-image: url("termina-back.JPG");
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container mt-5 p-3 bg-secondary">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="text-center">
-                Defina a Jornada de Trabalho do Funcionario
-              </h4>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PontoAPP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      background-image: url("termina-back.JPG");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5 p-3 bg-secondary">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="text-center">
+              Defina a Jornada de Trabalho do Funcionario
+            </h4>
+          </div>
+
+          <div class="card-body">
+            <div class="form-group">
+              <label for="inicioManha">Inicio manhã</label>
+              <input type="time" class="form-control" id="inicioManha" placeholder="" required />
             </div>
 
-            <div class="card-body">
-              <div class="form-group">
-                <label for="inicioManha">Inicio manhã</label>
-                <input
-                  type="time"
-                  class="form-control"
-                  id="inicioManha"
-                  placeholder=""
-                  required
-                />
-              </div>
+            <div class="form-group">
+              <label for="fimManha">Fim manhã</label>
+              <input type="time" name="" class="form-control" placeholder="" id="fimManha" required />
+            </div>
 
-              <div class="form-group">
-                <label for="fimManha">Fim manhã</label>
-                <input
-                  type="time"
-                  name=""
-                  class="form-control"
-                  placeholder=""
-                  id="fimManha"
-                  required
-                />
-              </div>
+            <div class="form-group">
+              <label for="inicioTarde">Inicio tarde</label>
+              <input type="time" name="" class="form-control" placeholder="" id="inicioTarde" required />
+            </div>
 
-              <div class="form-group">
-                <label for="inicioTarde">Inicio tarde</label>
-                <input
-                  type="time"
-                  name=""
-                  class="form-control"
-                  placeholder=""
-                  id="inicioTarde"
-                  required
-                />
-              </div>
+            <div class="form-group">
+              <label for="fimTarde">Fim tarde</label>
+              <input type="time" name="" class="form-control" placeholder="" id="fimTarde" required />
+            </div>
 
-              <div class="form-group">
-                <label for="fimTarde">Fim tarde</label>
-                <input
-                  type="time"
-                  name=""
-                  class="form-control"
-                  placeholder=""
-                  id="fimTarde"
-                  required
-                />
-              </div>
+            <div class="w-100">
+              <span id="periodoPontoSuccessMessage" class="text-success font-weight-normal"></span>
+            </div>
 
-              <div class="w-100">
-                <span
-                  id="periodoPontoSuccessMessage"
-                  class="text-success font-weight-normal"
-                ></span>
-              </div>
-
-              <div class="mt-3">
-                <button
-                  class="btn btn-primary float-right"
-                  onclick="submitPeriodoPontoForm()"
-                >
-                  Salvar
-                </button>
-              </div>
+            <div class="mt-3">
+              <button class="btn btn-primary float-right" onclick="submitPeriodoPontoForm()">
+                Salvar
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="col-md-8">
-          <table class="table table-bordered text-white text-center">
-            <h3 class="text-center pb-4">Jornada de Trabalho</h3>
+      <div class="col-md-8">
+        <table class="table table-bordered text-white text-center">
+          <h3 class="text-center pb-4">Jornada de Trabalho</h3>
 
-            <thead>
-              <th>ID</th>
-              <th>Inicio Manha</th>
-              <th>Fim Manha</th>
-              <th>Inicio Tarde</th>
-              <th>Fim Tarde</th>
-              <th>Editar</th>
-            </thead>
-            <tbody id="periodoPontoTb"></tbody>
-          </table>
-        </div>
+          <thead>
+            <th>ID</th>
+            <th>Inicio Manha</th>
+            <th>Fim Manha</th>
+            <th>Inicio Tarde</th>
+            <th>Fim Tarde</th>
+            <th>Editar</th>
+          </thead>
+          <tbody id="periodoPontoTb"></tbody>
+        </table>
       </div>
     </div>
+  </div>
 
-    <div class="container mt-5 p-3 bg-secondary">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="text-center">Bater o Ponto</h4>
+  <div class="container mt-5 p-3 bg-secondary">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="text-center">Bater o Ponto</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="form-group">
+              <label for="entradaManha">Entrada manhã</label>
+              <input type="time" class="form-control" id="entradaManha" placeholder="" required />
             </div>
 
-            <div class="card-body">
-              <div class="form-group">
-                <label for="entradaManha">Entrada manhã</label>
-                <input
-                  type="time"
-                  class="form-control"
-                  id="entradaManha"
-                  placeholder=""
-                  required
-                />
-              </div>
+            <div class="form-group">
+              <label for="saidaManha">Saida manhã</label>
+              <input type="time" name="" class="form-control" placeholder="" id="saidaManha" required />
+            </div>
 
-              <div class="form-group">
-                <label for="saidaManha">Saida manhã</label>
-                <input
-                  type="time"
-                  name=""
-                  class="form-control"
-                  placeholder=""
-                  id="saidaManha"
-                  required
-                />
-              </div>
+            <div class="form-group">
+              <label for="entradaTarde">Entrada tarde</label>
+              <input type="time" name="" class="form-control" placeholder="" id="entradaTarde" required />
+            </div>
 
-              <div class="form-group">
-                <label for="entradaTarde">Entrada tarde</label>
-                <input
-                  type="time"
-                  name=""
-                  class="form-control"
-                  placeholder=""
-                  id="entradaTarde"
-                  required
-                />
-              </div>
+            <div class="form-group">
+              <label for="saidaTarde">Saida tarde</label>
+              <input type="time" name="" class="form-control" placeholder="" id="saidaTarde" required />
+            </div>
 
-              <div class="form-group">
-                <label for="saidaTarde">Saida tarde</label>
-                <input
-                  type="time"
-                  name=""
-                  class="form-control"
-                  placeholder=""
-                  id="saidaTarde"
-                  required
-                />
-              </div>
+            <div class="w-100">
+              <span id="message" class="text-success font-weight-normal"></span>
+            </div>
 
-              <div class="w-100">
-                <span
-                  id="message"
-                  class="text-success font-weight-normal"
-                ></span>
-              </div>
-
-              <div class="mt-3">
-                <button
-                  class="btn btn-primary float-right"
-                  onclick="submitMarcacoesForm()"
-                >
-                  Salvar
-                </button>
-              </div>
+            <div class="mt-3">
+              <button class="btn btn-primary float-right" onclick="submitMarcacoesForm()">
+                Salvar
+              </button>
             </div>
           </div>
         </div>
-
-        <div class="col-md-8">
-          <table class="table table-bordered text-white text-center">
-            <h3 class="text-center pb-4">Marcações Feitas</h3>
-            <thead>
-              <th>Entrada Manha</th>
-              <th>Saida Manha</th>
-              <th>Entrada Tarde</th>
-              <th>Saida Tarde</th>
-              <th>Editar</th>
-              <th>Excluir</th>
-            </thead>
-            <tbody id="tbData"></tbody>
-          </table>
-        </div>
-        </div>
       </div>
 
-      <div class="container mt-5 mb-5 p-3 bg-secondary">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="text-center">Espelho do Ponto</h4>
-              </div>
+      <div class="col-md-8">
+        <table class="table table-bordered text-white text-center">
+          <h3 class="text-center pb-4">Marcações Feitas</h3>
+          <thead>
+            <th>Entrada Manha</th>
+            <th>Saida Manha</th>
+            <th>Entrada Tarde</th>
+            <th>Saida Tarde</th>
+            <th>Editar</th>
+            <th>Excluir</th>
+          </thead>
+          <tbody id="tbData"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-              <div class="card-body">
-                <div class="form-group">
-                  <label for="jornadaSelect">Selecione o ID da Jornada de Trabalho contido na primeira tabela</label>
-                  <select
-                    class="form-control"
-                    id="jornadaSelect"
-                    placeholder=""
-                    required
-                    onchange="getOverview()"
-                  >
-                  <option selected value="" hidden>Selecione uma opção</option>
-                </select>
-              </div>
+  <div class="container mt-5 mb-5 p-3 bg-secondary">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="text-center">Espelho do Ponto</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="form-group">
+              <label for="jornadaSelect">Selecione o ID da Jornada de Trabalho contido na primeira tabela</label>
+              <select class="form-control" id="jornadaSelect" placeholder="" required onchange="getOverview()">
+                <option selected value="" hidden>Selecione uma opção</option>
+              </select>
+            </div>
           </div>
 
           <div class="row p-3">
@@ -260,330 +187,353 @@
             </div>
           </div>
         </div>
+
+      </div>
+
+      <script>
+        // Periodo Ponto
+        var editPeriodoPontoFormData;
+
+        function getPeriodoPontoFormData() {
+          return {
+            inicioManha: document.getElementById("inicioManha").value,
+            fimManha: document.getElementById("fimManha").value,
+            inicioTarde: document.getElementById("inicioTarde").value,
+            fimTarde: document.getElementById("fimTarde").value,
+          };
+        }
+
+        function clearPeriodoFormData() {
+          document.getElementById("inicioManha").value = "";
+          document.getElementById("fimManha").value = "";
+          document.getElementById("inicioTarde").value = "";
+          document.getElementById("fimTarde").value = "";
+        }
+
+        function setPeriodoFormData(
+          inicioManha,
+          fimManha,
+          inicioTarde,
+          fimTarde
+        ) {
+          document.getElementById("inicioManha").value = inicioManha;
+          document.getElementById("fimManha").value = fimManha;
+          document.getElementById("inicioTarde").value = inicioTarde;
+          document.getElementById("fimTarde").value = fimTarde;
+        }
+
+        function setPeriodoSuccessMessage(message) {
+          document.getElementById("periodoPontoSuccessMessage").innerHTML =
+            message;
+        }
+
+        function clearPeriodoSuccessMessage() {
+          const TWO_SECONDS_IN_MILLIS = 2000;
+
+          setTimeout(() => {
+            setPeriodoSuccessMessage("");
+          }, TWO_SECONDS_IN_MILLIS);
+        }
+
+        function getEditPeriodoPonto(id) {
+          fetch("http://localhost:8080/pontoapp/ponto?id=" + id, {
+            method: "GET",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              editPeriodoPontoFormData = response;
+              setPeriodoFormData(
+                editPeriodoPontoFormData.inicioManha,
+                editPeriodoPontoFormData.fimManha,
+                editPeriodoPontoFormData.inicioTarde,
+                editPeriodoPontoFormData.fimTarde
+              );
+            });
+        }
+
+        async function addPeriodoPonto() {
+          let payload = getPeriodoPontoFormData();
+
+          await fetch("http://localhost:8080/pontoapp/ponto", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              setPeriodoSuccessMessage(response.message);
+              clearPeriodoFormData();
+              getPeriodoFormData();
+            });
+        }
+
+        function editPeriodoPonto() {
+          var formData = getPeriodoPontoFormData();
+          formData["id"] = editPeriodoPontoFormData.id;
+
+          fetch("http://localhost:8080/pontoapp/ponto", {
+            method: "PUT",
+            body: JSON.stringify(formData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              setPeriodoSuccessMessage(response.message);
+              clearPeriodoFormData();
+              getPeriodoFormData()
+              editPeriodoPontoFormData = null;
+            });
+        }
+
+        function submitPeriodoPontoForm() {
+          if (!editPeriodoPontoFormData) {
+            addPeriodoPonto();
+          } else {
+            editPeriodoPonto();
+          }
+          clearPeriodoSuccessMessage();
+        }
+
+        function getPeriodoFormData() {
+          clearPeriodoOverviewData()
           
-    </div>
+          fetch("http://localhost:8080/pontoapp/ponto", {
+            method: "GET",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              var selectElement = document.getElementById('jornadaSelect')
+              var tmpData = "";
+              response.forEach((periodoPonto, index) => {
+                tmpData += "<tr>";
+                tmpData += "<td>" + (Number(index) + 1) + "</td>";
+                tmpData += "<td>" + periodoPonto.inicioManha + "</td>";
+                tmpData += "<td>" + periodoPonto.fimManha + "</td>";
+                tmpData += "<td>" + periodoPonto.inicioTarde + "</td>";
+                tmpData += "<td>" + periodoPonto.fimTarde + "</td>";
+                tmpData +=
+                  "<td><button class='btn btn-primary' onclick='getEditPeriodoPonto(`" +
+                  periodoPonto.id +
+                  "`)'>Editar</button></td>";
+                tmpData += "</tr>";
 
-    <script>
-      // Periodo Ponto
-      var editPeriodoPontoFormData;
+                var option = document.createElement('option')
+                option.value = periodoPonto.id
+                option.text = "ID: " + (Number(index) + 1)
 
-      function getPeriodoPontoFormData() {
-        return {
-          inicioManha: document.getElementById("inicioManha").value,
-          fimManha: document.getElementById("fimManha").value,
-          inicioTarde: document.getElementById("inicioTarde").value,
-          fimTarde: document.getElementById("fimTarde").value,
-        };
-      }
+                selectElement.add(option)
+              })
 
-      function clearPeriodoFormData() {
-        document.getElementById("inicioManha").value = "";
-        document.getElementById("fimManha").value = "";
-        document.getElementById("inicioTarde").value = "";
-        document.getElementById("fimTarde").value = "";
-      }
-
-      function setPeriodoFormData(
-        inicioManha,
-        fimManha,
-        inicioTarde,
-        fimTarde
-      ) {
-        document.getElementById("inicioManha").value = inicioManha;
-        document.getElementById("fimManha").value = fimManha;
-        document.getElementById("inicioTarde").value = inicioTarde;
-        document.getElementById("fimTarde").value = fimTarde;
-      }
-
-      function setPeriodoSuccessMessage(message) {
-        document.getElementById("periodoPontoSuccessMessage").innerHTML =
-          message;
-      }
-
-      function clearPeriodoSuccessMessage() {
-        const TWO_SECONDS_IN_MILLIS = 2000;
-
-        setTimeout(() => {
-          setPeriodoSuccessMessage("");
-        }, TWO_SECONDS_IN_MILLIS);
-      }
-
-      function getEditPeriodoPonto(id) {
-        fetch("http://localhost:8080/pontoapp/ponto?id=" + id, {
-          method: "GET",
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            editPeriodoPontoFormData = response;
-            setPeriodoFormData(
-              editPeriodoPontoFormData.inicioManha,
-              editPeriodoPontoFormData.fimManha,
-              editPeriodoPontoFormData.inicioTarde,
-              editPeriodoPontoFormData.fimTarde
-            );
-          });
-      }
-
-      async function addPeriodoPonto() {
-        let payload = getPeriodoPontoFormData();
-
-        await fetch("http://localhost:8080/pontoapp/ponto", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            setPeriodoSuccessMessage(response.message);
-            clearPeriodoFormData();
-            getPeriodoFormData();
-          });
-      }
-
-      function editPeriodoPonto() {
-        var formData = getPeriodoPontoFormData();
-        formData["id"] = editPeriodoPontoFormData.id;
-
-        fetch("http://localhost:8080/pontoapp/ponto", {
-          method: "PUT",
-          body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            setPeriodoSuccessMessage(response.message);
-            clearPeriodoFormData();
-            getPeriodoFormData()
-            editPeriodoPontoFormData = null;
-          });
-      }
-
-      function submitPeriodoPontoForm() {
-        if (!editPeriodoPontoFormData) {
-          addPeriodoPonto();
-        } else {
-          editPeriodoPonto();
-        }
-        clearPeriodoSuccessMessage();
-      }
-
-      function getPeriodoFormData() {
-        fetch("http://localhost:8080/pontoapp/ponto", {
-          method: "GET",
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            var selectElement = document.getElementById('jornadaSelect')
-            var tmpData = "";
-            response.forEach((periodoPonto, index) => {
-              tmpData += "<tr>";
-              tmpData += "<td>" + (Number(index) + 1) + "</td>";
-              tmpData += "<td>" + periodoPonto.inicioManha + "</td>";
-              tmpData += "<td>" + periodoPonto.fimManha + "</td>";
-              tmpData += "<td>" + periodoPonto.inicioTarde + "</td>";
-              tmpData += "<td>" + periodoPonto.fimTarde + "</td>";
-              tmpData +=
-                "<td><button class='btn btn-primary' onclick='getEditPeriodoPonto(`" +
-                periodoPonto.id +
-                "`)'>Editar</button></td>";
-              tmpData += "</tr>";
-
-              var option = document.createElement('option')
-              option.value = periodoPonto.id
-              option.text = "ID: " + (Number(index) + 1)
-
-              selectElement.add(option)
+              document.getElementById("periodoPontoTb").innerHTML = tmpData;
+            })
+            .catch(err => {
+              console.log(err)
             });
-
-            document.getElementById("periodoPontoTb").innerHTML = tmpData;
-          });
-      }
-
-      getPeriodoFormData();
-
-      // Marcacoes
-      var editMarcacaoFormData;
-
-      function getMarcacoesFormData() {
-        return {
-          entradaManha: document.getElementById("entradaManha").value,
-          saidaManha: document.getElementById("saidaManha").value,
-          entradaTarde: document.getElementById("entradaTarde").value,
-          saidaTarde: document.getElementById("saidaTarde").value,
-        };
-      }
-
-      function clearMarcacoesFormData() {
-        document.getElementById("entradaManha").value = "";
-        document.getElementById("saidaManha").value = "";
-        document.getElementById("entradaTarde").value = "";
-        document.getElementById("saidaTarde").value = "";
-      }
-
-      function setMarcacoesFormData(
-        entradaManha,
-        saidaManha,
-        entradaTarde,
-        saidaTarde
-      ) {
-        document.getElementById("entradaManha").value = entradaManha;
-        document.getElementById("saidaManha").value = saidaManha;
-        document.getElementById("entradaTarde").value = entradaTarde;
-        document.getElementById("saidaTarde").value = saidaTarde;
-      }
-
-      function setMarcacoesSuccessMessage(message) {
-        document.getElementById("message").innerHTML = message;
-      }
-
-      function clearMarcacoesSuccessMessage() {
-        const TWO_SECONDS_IN_MILLIS = 2000;
-
-        setTimeout(() => {
-          setMarcacoesSuccessMessage("");
-        }, TWO_SECONDS_IN_MILLIS);
-      }
-
-      function getEditMarcacao(id) {
-        fetch("http://localhost:8080/pontoapp/marcacoes?id=" + id, {
-          method: "GET",
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            editMarcacaoFormData = response;
-            setMarcacoesFormData(
-              editMarcacaoFormData.entradaManha,
-              editMarcacaoFormData.saidaManha,
-              editMarcacaoFormData.entradaTarde,
-              editMarcacaoFormData.saidaTarde
-            );
-
-          });
-      }
-
-      function submitMarcacoesForm() {
-        if (!editMarcacaoFormData) {
-          addMarcacao();
-        } else {
-          editMarcacao();
         }
-        clearMarcacoesSuccessMessage();
-      }
 
-      async function addMarcacao() {
-        let payload = getMarcacoesFormData();
+        getPeriodoFormData();
 
-        await fetch("http://localhost:8080/pontoapp/marcacoes", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            getPeriodoFormData()
-            setMarcacoesSuccessMessage(response.message);
-            clearMarcacoesFormData();
-            getData();
-          });
-      }
+        // Marcacoes
+        var editMarcacaoFormData;
 
-      async function editMarcacao() {
-        var formData = getMarcacoesFormData();
-        formData["id"] = editMarcacaoFormData.id;
+        function getMarcacoesFormData() {
+          return {
+            entradaManha: document.getElementById("entradaManha").value,
+            saidaManha: document.getElementById("saidaManha").value,
+            entradaTarde: document.getElementById("entradaTarde").value,
+            saidaTarde: document.getElementById("saidaTarde").value,
+          };
+        }
 
-        await fetch("http://localhost:8080/pontoapp/marcacoes", {
-          method: "PUT",
-          body: JSON.stringify(formData),
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            setMarcacoesSuccessMessage(response.message);
-            clearMarcacoesFormData();
-            getData();
-            getPeriodoFormData()
-          });
-      }
+        function clearMarcacoesFormData() {
+          document.getElementById("entradaManha").value = "";
+          document.getElementById("saidaManha").value = "";
+          document.getElementById("entradaTarde").value = "";
+          document.getElementById("saidaTarde").value = "";
+        }
 
-      function deleteMarcacao(id) {
-        fetch("http://localhost:8080/pontoapp/marcacoes?id=" + id, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            setMarcacoesSuccessMessage(response.message);
-            getData();
-            getPeriodoFormData()
-            clearMarcacoesSuccessMessage();
-            editMarcacaoFormData = null;
-          });
-      }
+        function setMarcacoesFormData(
+          entradaManha,
+          saidaManha,
+          entradaTarde,
+          saidaTarde
+        ) {
+          document.getElementById("entradaManha").value = entradaManha;
+          document.getElementById("saidaManha").value = saidaManha;
+          document.getElementById("entradaTarde").value = entradaTarde;
+          document.getElementById("saidaTarde").value = saidaTarde;
+        }
 
-      function getData() {
-        fetch("http://localhost:8080/pontoapp/marcacoes", {
-          method: "GET",
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            var tmpData = "";
-            response.forEach((marcacao) => {
-              tmpData += "<tr>";
-              tmpData += "<td>" + marcacao.entradaManha + "</td>";
-              tmpData += "<td>" + marcacao.saidaManha + "</td>";
-              tmpData += "<td>" + marcacao.entradaTarde + "</td>";
-              tmpData += "<td>" + marcacao.saidaTarde + "</td>";
+        function setMarcacoesSuccessMessage(message) {
+          document.getElementById("message").innerHTML = message;
+        }
 
-              tmpData +=
-                "<td><button class='btn btn-primary' onclick='getEditMarcacao(`" +
-                marcacao.id +
-                "`)'>Editar</button></td>";
-              tmpData +=
-                "<td><button class='btn btn-danger' onclick='deleteMarcacao(`" +
-                marcacao.id +
-                "`)'>Deletar</button></td>";
+        function clearMarcacoesSuccessMessage() {
+          const TWO_SECONDS_IN_MILLIS = 2000;
 
-              tmpData += "</tr>";
+          setTimeout(() => {
+            setMarcacoesSuccessMessage("");
+          }, TWO_SECONDS_IN_MILLIS);
+        }
+
+        function getEditMarcacao(id) {
+          fetch("http://localhost:8080/pontoapp/marcacoes?id=" + id, {
+            method: "GET",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              editMarcacaoFormData = response;
+              setMarcacoesFormData(
+                editMarcacaoFormData.entradaManha,
+                editMarcacaoFormData.saidaManha,
+                editMarcacaoFormData.entradaTarde,
+                editMarcacaoFormData.saidaTarde
+              );
+
             });
-            document.getElementById("tbData").innerHTML = tmpData;
-          });
-      }
+        }
 
-      getData();
+        function submitMarcacoesForm() {
+          if (!editMarcacaoFormData) {
+            addMarcacao();
+          } else {
+            editMarcacao();
+          }
+          clearMarcacoesSuccessMessage();
+        }
 
-      // overview
-      function getOverview() {
-        var selectedId = document.getElementById("jornadaSelect").value;
+        async function addMarcacao() {
+          let payload = getMarcacoesFormData();
 
-        fetch("http://localhost:8080/pontoapp/marcacoes/overview?id=" + selectedId, {
-          method: "POST"
-        })
-        .then(res => res.json())
-        .then(response => {
-          var tbAtrasoData = '';
-          var tbHoraExtraData = '';
-          var tbSaldoData = ''
+          await fetch("http://localhost:8080/pontoapp/marcacoes", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              getPeriodoFormData()
+              setMarcacoesSuccessMessage(response.message);
+              clearMarcacoesFormData();
+              getData();
+            });
+        }
 
-          tbAtrasoData += "<tr>"
-          tbAtrasoData += "<td>" + response.atraso + "</td>"
-          tbAtrasoData += "</tr>"
+        async function editMarcacao() {
+          var formData = getMarcacoesFormData();
+          formData["id"] = editMarcacaoFormData.id;
 
-          tbHoraExtraData += "<tr>"
-          tbHoraExtraData += "<td>" + response.horaExtra + "</td>"
-          tbHoraExtraData += "</tr>"
+          await fetch("http://localhost:8080/pontoapp/marcacoes", {
+            method: "PUT",
+            body: JSON.stringify(formData),
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              setMarcacoesSuccessMessage(response.message);
+              clearMarcacoesFormData();
+              getData();
+              getPeriodoFormData()
+            });
+        }
 
-          tbSaldoData += "<tr>"
-          tbSaldoData += "<td>" + response.saldo + "</td>"
-          tbSaldoData += "</tr>"
+        function deleteMarcacao(id) {
+          fetch("http://localhost:8080/pontoapp/marcacoes?id=" + id, {
+            method: "DELETE",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              setMarcacoesSuccessMessage(response.message);
+              getData();
+              getPeriodoFormData()
+              clearMarcacoesSuccessMessage();
+              editMarcacaoFormData = null;
+            });
+        }
 
-          document.getElementById('tbAtraso').innerHTML = tbAtrasoData;
-          document.getElementById('tbHoraExtra').innerHTML = tbHoraExtraData;
-          document.getElementById('tbSaldo').innerHTML = tbSaldoData;
+        function getData() {
+          fetch("http://localhost:8080/pontoapp/marcacoes", {
+            method: "GET",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              var tmpData = "";
+              response.forEach((marcacao) => {
+                tmpData += "<tr>";
+                tmpData += "<td>" + marcacao.entradaManha + "</td>";
+                tmpData += "<td>" + marcacao.saidaManha + "</td>";
+                tmpData += "<td>" + marcacao.entradaTarde + "</td>";
+                tmpData += "<td>" + marcacao.saidaTarde + "</td>";
 
-        })
-        .catch(err => {
-          console.log(err)
-        })
-      }
+                tmpData +=
+                  "<td><button class='btn btn-primary' onclick='getEditMarcacao(`" +
+                  marcacao.id +
+                  "`)'>Editar</button></td>";
+                tmpData +=
+                  "<td><button class='btn btn-danger' onclick='deleteMarcacao(`" +
+                  marcacao.id +
+                  "`)'>Deletar</button></td>";
 
-    </script>
-  </body>
+                tmpData += "</tr>";
+              });
+              document.getElementById("tbData").innerHTML = tmpData;
+            });
+        }
+
+        getData();
+
+        // overview
+        function getOverview() {
+          var selectedId = document.getElementById("jornadaSelect").value;
+
+          fetch("http://localhost:8080/pontoapp/marcacoes/overview?id=" + selectedId, {
+            method: "POST"
+          })
+            .then(res => res.json())
+            .then(response => {
+              var tbAtrasoData = '';
+              var tbHoraExtraData = '';
+              var tbSaldoData = ''
+
+              tbAtrasoData += "<tr>"
+              tbAtrasoData += "<td>" + response.atraso + "</td>"
+              tbAtrasoData += "</tr>"
+
+              tbHoraExtraData += "<tr>"
+              tbHoraExtraData += "<td>" + response.horaExtra + "</td>"
+              tbHoraExtraData += "</tr>"
+
+              tbSaldoData += "<tr>"
+              tbSaldoData += "<td>" + response.saldo + "</td>"
+              tbSaldoData += "</tr>"
+
+              document.getElementById('tbAtraso').innerHTML = tbAtrasoData;
+              document.getElementById('tbHoraExtra').innerHTML = tbHoraExtraData;
+              document.getElementById('tbSaldo').innerHTML = tbSaldoData;
+
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+
+        function clearPeriodoOverviewData() {
+          var selectElement = document.getElementById('jornadaSelect');
+
+          while (selectElement.options.length > 0) {
+            selectElement.remove(0);
+          }
+
+          const defaultOption = document.createElement('option')
+          defaultOption.hidden = true;
+          defaultOption.value = ''
+          selectElement.add(defaultOption)
+
+          document.getElementById('tbAtraso').innerHTML = '';
+          document.getElementById('tbHoraExtra').innerHTML = '';
+          document.getElementById('tbSaldo').innerHTML = '';
+        }
+
+      </script>
+</body>
+
 </html>
