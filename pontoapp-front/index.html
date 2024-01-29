@@ -481,6 +481,8 @@
         })
           .then((res) => res.json())
           .then((response) => {
+            clearOverviewTables()
+            getPeriodoFormData()
             setMarcacoesSuccessMessage(response.message);
             clearMarcacoesFormData();
             getData();
@@ -501,6 +503,7 @@
             clearMarcacoesFormData();
             getData();
             clearOverviewTables()
+            getPeriodoFormData()
           });
       }
 
@@ -512,6 +515,8 @@
           .then((response) => {
             setMarcacoesSuccessMessage(response.message);
             getData();
+            clearOverviewTables()
+            getPeriodoFormData()
             clearMarcacoesSuccessMessage();
             editMarcacaoFormData = null;
           });
@@ -570,12 +575,12 @@
           tbHoraExtraData += "</tr>"
 
           tbSaldoData += "<tr>"
-            tbSaldoData += "<td>" + response.saldo + "</td>"
-            tbSaldoData += "</tr>"
+          tbSaldoData += "<td>" + response.saldo + "</td>"
+          tbSaldoData += "</tr>"
 
-            document.getElementById('tbAtraso').innerHTML = tbAtrasoData;
-            document.getElementById('tbHoraExtra').innerHTML = tbHoraExtraData;
-            document.getElementById('tbSaldo').innerHTML = tbSaldoData;
+          document.getElementById('tbAtraso').innerHTML = tbAtrasoData;
+          document.getElementById('tbHoraExtra').innerHTML = tbHoraExtraData;
+          document.getElementById('tbSaldo').innerHTML = tbSaldoData;
 
         })
         .catch(err => {
