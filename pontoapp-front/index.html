@@ -199,8 +199,6 @@
               <th>Saida Manha</th>
               <th>Entrada Tarde</th>
               <th>Saida Tarde</th>
-              <th>Atraso</th>
-              <th>Hora Extra</th>
               <th>Editar</th>
               <th>Excluir</th>
             </thead>
@@ -255,8 +253,8 @@
         }, TWO_SECONDS_IN_MILLIS);
       }
 
-      function editPeriodoPonto() {
-        fetch("http://localhost:8080/pontoapp/ponto", {
+      function getEditPeriodoPonto(id) {
+        fetch("http://localhost:8080/pontoapp/ponto?id=" + id, {
           method: "GET",
         })
           .then((res) => res.json())
@@ -286,9 +284,32 @@
           });
       }
 
+      function editPeriodoPonto() {
+        var formData = getPeriodoPontoFormData();
+        formData["id"] = editPeriodoPontoFormData.id;
+
+        fetch("http://localhost:8080/pontoapp/ponto", {
+          method: "PUT",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            setPeriodoSuccessMessage(response.message);
+            clearPeriodoFormData();
+            getData();
+          });
+      }
+
       function submitPeriodoPontoForm() {
-        addPeriodoPonto();
-        clearPeriodoSuccessMessage();
+        if (!editPeriodoPontoFormData) {
+          addPeriodoPonto();
+        } else {
+          editPeriodoPonto();
+        }
+        clearMarcacoesSuccessMessage();
       }
 
       function getPeriodoFormData() {
@@ -297,21 +318,20 @@
         })
           .then((res) => res.json())
           .then((response) => {
-            if (
-              !response.inicioManha ||
-              !response.fimManha ||
-              !response.inicioTarde ||
-              !response.fimTarde
-            )
-              return;
             var tmpData = "<tr>";
-            tmpData += "<td>" + response.inicioManha + "</td>";
-            tmpData += "<td>" + response.fimManha + "</td>";
-            tmpData += "<td>" + response.inicioTarde + "</td>";
-            tmpData += "<td>" + response.fimTarde + "</td>";
-            tmpData +=
-              "<td><button class='btn btn-primary' onclick='editPeriodoPonto()'>Editar</button></td>";
-            tmpData += "</tr>";
+
+            response.forEach((periodoPonto) => {
+              tmpData += "<tr>";
+              tmpData += "<td>" + periodoPonto.inicioManha + "</td>";
+              tmpData += "<td>" + periodoPonto.fimManha + "</td>";
+              tmpData += "<td>" + periodoPonto.inicioTarde + "</td>";
+              tmpData += "<td>" + periodoPonto.fimTarde + "</td>";
+              tmpData +=
+                "<td><button class='btn btn-primary' onclick='getEditPeriodoPonto(`" +
+                periodoPonto.id +
+                "`)'>Editar</button></td>";
+              tmpData += "</tr>";
+            });
 
             document.getElementById("periodoPontoTb").innerHTML = tmpData;
           });
@@ -384,7 +404,7 @@
         } else {
           editMarcacao();
         }
-        clearMarcacoesSuccessMessage();
+        clearPeriodoSuccessMessage();
       }
 
       async function addMarcacao() {
@@ -444,20 +464,7 @@
               tmpData += "<td>" + marcacao.saidaManha + "</td>";
               tmpData += "<td>" + marcacao.entradaTarde + "</td>";
               tmpData += "<td>" + marcacao.saidaTarde + "</td>";
-              tmpData +=
-                "<td class='font-weight-bold' style='color: " +
-                (marcacao.atraso > "00:00" ? "red" : "") +
-                "'>" +
-                (marcacao.atraso > "00:00" ? "-" : "") +
-                marcacao.atraso +
-                "</td>";
-              tmpData +=
-                "<td class='font-weight-bold' style='color: " +
-                (marcacao.horaExtra >= "00:00" ? "green" : "") +
-                "'>" +
-                (marcacao.horaExtra > "00:00" ? "+" : "") +
-                marcacao.horaExtra +
-                "</td>";
+
               tmpData +=
                 "<td><button class='btn btn-primary' onclick='getEditMarcacao(`" +
                 marcacao.id +

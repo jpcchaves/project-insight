@@ -100,6 +100,16 @@ public class PeriodoPontoServlet extends HttpServlet {
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Periodo de ponto atualizado com sucesso!")));
     }
 
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
     private void validatePeriodoPontoLimit() {
         int PERIODO_PONTO_MAX_LIMIT = 3;
 
