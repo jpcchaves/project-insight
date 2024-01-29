@@ -236,7 +236,6 @@
 
             <div class="col-md-4 col-sm-4">
               <table class="table table-bordered  text-center">
-                <h5 class="text-center ">Atrasos</h5>
                 <thead>
                   <th>Atraso</th>
                 </thead>
@@ -245,7 +244,6 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <table class="table table-bordered  text-center">
-                <h5 class="text-center ">Hora Extra</h5>
                 <thead>
                   <th>Hora Extra</th>
                 </thead>
@@ -254,7 +252,6 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <table class="table table-bordered text-center">
-                <h5 class="text-center ">Saldo</h5>
                 <thead>
                   <th>Saldo</th>
                 </thead>
@@ -368,7 +365,7 @@
         } else {
           editPeriodoPonto();
         }
-        clearMarcacoesSuccessMessage();
+        clearPeriodoSuccessMessage();
       }
 
       function getPeriodoFormData() {
@@ -472,7 +469,7 @@
         } else {
           editMarcacao();
         }
-        clearPeriodoSuccessMessage();
+        clearMarcacoesSuccessMessage();
       }
 
       async function addMarcacao() {
