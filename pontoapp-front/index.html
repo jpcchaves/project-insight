@@ -324,6 +324,7 @@
               editPeriodoPontoFormData.inicioTarde,
               editPeriodoPontoFormData.fimTarde
             );
+            clearOverviewTables()
           });
       }
 
@@ -460,6 +461,8 @@
               editMarcacaoFormData.entradaTarde,
               editMarcacaoFormData.saidaTarde
             );
+
+            clearOverviewTables()
           });
       }
 
@@ -500,6 +503,7 @@
             setMarcacoesSuccessMessage(response.message);
             clearMarcacoesFormData();
             getData();
+            clearOverviewTables()
           });
       }
 
@@ -580,6 +584,20 @@
         .catch(err => {
           console.log(err)
         })
+      }
+
+      function clearOverviewTables() {
+        var jornadaSelect = document.getElementById("jornadaSelect");
+
+        jornadaSelect.value = ""
+
+        while (jornadaSelect.firstChild) {
+            jornadaSelect.removeChild(jornadaSelect.firstChild);
+        }
+            
+        document.getElementById('tbAtraso').innerHTML = '';
+        document.getElementById('tbHoraExtra').innerHTML = '';
+        document.getElementById('tbSaldo').innerHTML = '';
       }
     </script>
   </body>
