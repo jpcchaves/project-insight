@@ -104,6 +104,7 @@
             <h3 class="text-center pb-4">Jornada de Trabalho</h3>
 
             <thead>
+              <th>ID</th>
               <th>Inicio Manha</th>
               <th>Fim Manha</th>
               <th>Inicio Tarde</th>
@@ -193,7 +194,7 @@
 
         <div class="col-md-8">
           <table class="table table-bordered text-white text-center">
-            <h3 class="text-center pb-4">Espelho do Ponto</h3>
+            <h3 class="text-center pb-4">Marcações Feitas</h3>
             <thead>
               <th>Entrada Manha</th>
               <th>Saida Manha</th>
@@ -205,7 +206,64 @@
             <tbody id="tbData"></tbody>
           </table>
         </div>
+        </div>
       </div>
+
+      <div class="container mt-5 mb-5 p-3 bg-secondary">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="text-center">Espelho do Ponto</h4>
+              </div>
+
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="jornadaSelect">Selecione o ID da Jornada de Trabalho contido na primeira tabela</label>
+                  <select
+                    class="form-control"
+                    id="jornadaSelect"
+                    placeholder=""
+                    required
+                    onchange="getOverview()"
+                  >
+                  <option selected value="" hidden>Selecione uma opção</option>
+                </select>
+              </div>
+          </div>
+
+          <div class="row p-3">
+
+            <div class="col-md-4 col-sm-4">
+              <table class="table table-bordered  text-center">
+                <h5 class="text-center ">Atrasos</h5>
+                <thead>
+                  <th>Atraso</th>
+                </thead>
+                <tbody id="tbAtraso"></tbody>
+              </table>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <table class="table table-bordered  text-center">
+                <h5 class="text-center ">Hora Extra</h5>
+                <thead>
+                  <th>Hora Extra</th>
+                </thead>
+                <tbody id="tbHoraExtra"></tbody>
+              </table>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <table class="table table-bordered text-center">
+                <h5 class="text-center ">Saldo</h5>
+                <thead>
+                  <th>Saldo</th>
+                </thead>
+                <tbody id="tbSaldo"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+          
     </div>
 
     <script>
@@ -299,7 +357,7 @@
           .then((response) => {
             setPeriodoSuccessMessage(response.message);
             clearPeriodoFormData();
-            getData();
+            getPeriodoFormData()
           });
       }
 
@@ -318,10 +376,11 @@
         })
           .then((res) => res.json())
           .then((response) => {
-            var tmpData = "<tr>";
-
-            response.forEach((periodoPonto) => {
+            var selectElement = document.getElementById('jornadaSelect')
+            var tmpData = "";
+            response.forEach((periodoPonto, index) => {
               tmpData += "<tr>";
+              tmpData += "<td>" + (Number(index) + 1) + "</td>";
               tmpData += "<td>" + periodoPonto.inicioManha + "</td>";
               tmpData += "<td>" + periodoPonto.fimManha + "</td>";
               tmpData += "<td>" + periodoPonto.inicioTarde + "</td>";
@@ -331,6 +390,12 @@
                 periodoPonto.id +
                 "`)'>Editar</button></td>";
               tmpData += "</tr>";
+
+              var option = document.createElement('option')
+              option.value = periodoPonto.id
+              option.text = "ID: " + (Number(index) + 1)
+
+              selectElement.add(option)
             });
 
             document.getElementById("periodoPontoTb").innerHTML = tmpData;
@@ -481,6 +546,41 @@
       }
 
       getData();
+
+      // overview
+      function getOverview() {
+        var selectedId = document.getElementById("jornadaSelect").value;
+
+        fetch("http://localhost:8080/pontoapp/marcacoes/overview?id=" + selectedId, {
+          method: "POST"
+        })
+        .then(res => res.json())
+        .then(response => {
+          var tbAtrasoData = '';
+          var tbHoraExtraData = '';
+          var tbSaldoData = ''
+
+          tbAtrasoData += "<tr>"
+          tbAtrasoData += "<td>" + response.atraso + "</td>"
+          tbAtrasoData += "</tr>"
+
+          tbHoraExtraData += "<tr>"
+          tbHoraExtraData += "<td>" + response.horaExtra + "</td>"
+          tbHoraExtraData += "</tr>"
+
+          tbSaldoData += "<tr>"
+            tbSaldoData += "<td>" + response.saldo + "</td>"
+            tbSaldoData += "</tr>"
+
+            document.getElementById('tbAtraso').innerHTML = tbAtrasoData;
+            document.getElementById('tbHoraExtra').innerHTML = tbHoraExtraData;
+            document.getElementById('tbSaldo').innerHTML = tbSaldoData;
+
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
     </script>
   </body>
 </html>
