@@ -8,8 +8,8 @@ import com.insight.pontoapp.domain.DTO.MarcacaoRequestUpdateDTO;
 import com.insight.pontoapp.domain.DTO.MarcacaoResponseDTO;
 import com.insight.pontoapp.domain.DTO.ServletMessageResponse;
 import com.insight.pontoapp.domain.models.Marcacao;
-import com.insight.pontoapp.utils.JsonUtils;
-import com.insight.pontoapp.utils.JsonUtilsImpl;
+import com.insight.pontoapp.utils.json.JsonUtils;
+import com.insight.pontoapp.utils.json.JsonUtilsImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -166,7 +166,7 @@ public class MarcacoesServlet extends HttpServlet {
     }
 
     private boolean hasPeriodoPonto() {
-        return PeriodoPontoData.getPeriodoPonto().isEmpty();
+        return !PeriodoPontoData.getPeriodoPonto().isEmpty();
     }
 
     private void deleteById(UUID id) {

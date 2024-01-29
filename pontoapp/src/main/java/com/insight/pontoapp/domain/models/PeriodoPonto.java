@@ -64,5 +64,11 @@ public class PeriodoPonto {
     public void setFimTarde(LocalTime fimTarde) {
         this.fimTarde = fimTarde;
     }
+    public Duration calcularCargaHoraria() {
+        Duration manhaDuration = Duration.between(inicioManha, fimManha);
 
+        Duration tardeDuration = Duration.between(inicioTarde, fimTarde);
+
+        return manhaDuration.plus(tardeDuration);
+    }
 }
