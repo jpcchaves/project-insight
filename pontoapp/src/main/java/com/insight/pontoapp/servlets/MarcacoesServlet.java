@@ -56,8 +56,6 @@ public class MarcacoesServlet extends HttpServlet {
         Marcacao marcacao = new Marcacao(entradaManha, saidaManha, entradaTarde, saidaTarde);
         MarcacoesData.getMarcacoesData().add(marcacao);
 
-        marcacao.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
-
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_CREATED);
         PrintWriter out = response.getWriter();
@@ -83,7 +81,6 @@ public class MarcacoesServlet extends HttpServlet {
         marcacaoById.setSaidaManha(marcacaoJson.getSaidaManha());
         marcacaoById.setEntradaTarde(marcacaoJson.getEntradaTarde());
         marcacaoById.setSaidaTarde(marcacaoJson.getSaidaTarde());
-        marcacaoById.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
 
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcacao editada com sucesso")));
     }
@@ -143,11 +140,9 @@ public class MarcacoesServlet extends HttpServlet {
                                         marcacao.getEntradaManha(),
                                         marcacao.getSaidaManha(),
                                         marcacao.getEntradaTarde(),
-                                        marcacao.getSaidaTarde(),
-                                        marcacao.getAtrasoFormatado(),
-                                        marcacao.getHoraExtraFormatada())
+                                        marcacao.getSaidaTarde()
                         )
-                );
+                ));
 
         return marcacaoResponseDTO;
     }
@@ -158,9 +153,7 @@ public class MarcacoesServlet extends HttpServlet {
                 marcacao.getEntradaManha(),
                 marcacao.getSaidaManha(),
                 marcacao.getEntradaTarde(),
-                marcacao.getSaidaTarde(),
-                marcacao.getAtrasoFormatado(),
-                marcacao.getHoraExtraFormatada()
+                marcacao.getSaidaTarde()
         );
     }
 
@@ -173,10 +166,7 @@ public class MarcacoesServlet extends HttpServlet {
     }
 
     private boolean hasPeriodoPonto() {
-        return PeriodoPontoData.getPeriodoPonto().getInicioManha() != null ||
-                PeriodoPontoData.getPeriodoPonto().getFimManha() != null ||
-                PeriodoPontoData.getPeriodoPonto().getInicioTarde() != null ||
-                PeriodoPontoData.getPeriodoPonto().getFimTarde() != null;
+        return PeriodoPontoData.getPeriodoPonto().isEmpty();
     }
 
     private void deleteById(UUID id) {
