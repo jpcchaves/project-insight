@@ -321,7 +321,6 @@
               editPeriodoPontoFormData.inicioTarde,
               editPeriodoPontoFormData.fimTarde
             );
-            clearOverviewTables()
           });
       }
 
@@ -356,6 +355,7 @@
             setPeriodoSuccessMessage(response.message);
             clearPeriodoFormData();
             getPeriodoFormData()
+            editPeriodoPontoFormData = null;
           });
       }
 
@@ -459,7 +459,6 @@
               editMarcacaoFormData.saidaTarde
             );
 
-            clearOverviewTables()
           });
       }
 
@@ -481,7 +480,6 @@
         })
           .then((res) => res.json())
           .then((response) => {
-            clearOverviewTables()
             getPeriodoFormData()
             setMarcacoesSuccessMessage(response.message);
             clearMarcacoesFormData();
@@ -502,7 +500,6 @@
             setMarcacoesSuccessMessage(response.message);
             clearMarcacoesFormData();
             getData();
-            clearOverviewTables()
             getPeriodoFormData()
           });
       }
@@ -515,7 +512,6 @@
           .then((response) => {
             setMarcacoesSuccessMessage(response.message);
             getData();
-            clearOverviewTables()
             getPeriodoFormData()
             clearMarcacoesSuccessMessage();
             editMarcacaoFormData = null;
@@ -588,19 +584,6 @@
         })
       }
 
-      function clearOverviewTables() {
-        var jornadaSelect = document.getElementById("jornadaSelect");
-
-        jornadaSelect.value = ""
-
-        while (jornadaSelect.firstChild) {
-            jornadaSelect.removeChild(jornadaSelect.firstChild);
-        }
-            
-        document.getElementById('tbAtraso').innerHTML = '';
-        document.getElementById('tbHoraExtra').innerHTML = '';
-        document.getElementById('tbSaldo').innerHTML = '';
-      }
     </script>
   </body>
 </html>
