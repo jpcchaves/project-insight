@@ -1,24 +1,24 @@
-package com.insight.pontoapp.domain.models;
+package com.insight.pontoapp.domain.DTO;
 
-import java.time.Duration;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public class PeriodoPonto {
-    private UUID id = UUID.randomUUID();
+public class PeriodoPontoRequestDTO {
+    private UUID id;
     private LocalTime inicioManha;
     private LocalTime fimManha;
     private LocalTime inicioTarde;
     private LocalTime fimTarde;
 
-
-    public PeriodoPonto() {
+    public PeriodoPontoRequestDTO() {
     }
 
-    public PeriodoPonto(LocalTime inicioManha,
-                        LocalTime fimManha,
-                        LocalTime inicioTarde,
-                        LocalTime fimTarde) {
+    public PeriodoPontoRequestDTO(UUID id,
+                                  LocalTime inicioManha,
+                                  LocalTime fimManha,
+                                  LocalTime inicioTarde,
+                                  LocalTime fimTarde) {
+        this.id = id;
         this.inicioManha = inicioManha;
         this.fimManha = fimManha;
         this.inicioTarde = inicioTarde;
@@ -63,12 +63,5 @@ public class PeriodoPonto {
 
     public void setFimTarde(LocalTime fimTarde) {
         this.fimTarde = fimTarde;
-    }
-    public Duration calcularCargaHoraria() {
-        Duration manhaDuration = Duration.between(inicioManha, fimManha);
-
-        Duration tardeDuration = Duration.between(inicioTarde, fimTarde);
-
-        return manhaDuration.plus(tardeDuration);
     }
 }

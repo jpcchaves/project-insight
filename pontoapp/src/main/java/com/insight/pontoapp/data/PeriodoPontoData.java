@@ -2,18 +2,18 @@ package com.insight.pontoapp.data;
 
 import com.insight.pontoapp.domain.models.PeriodoPonto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PeriodoPontoData {
-    private static PeriodoPonto periodoPonto = new PeriodoPonto();
+    private static List<PeriodoPonto> periodoPonto = new ArrayList<>();
 
 
     public PeriodoPontoData() {
     }
 
-    public static void setPeriodoPonto(PeriodoPonto periodoPonto) {
-        PeriodoPontoData.periodoPonto = periodoPonto;
-    }
-
-    public static PeriodoPonto getPeriodoPonto() {
+    public static List<PeriodoPonto> getPeriodoPonto() {
         return periodoPonto;
     }
+
 }

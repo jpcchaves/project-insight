@@ -8,8 +8,8 @@ import com.insight.pontoapp.domain.DTO.MarcacaoRequestUpdateDTO;
 import com.insight.pontoapp.domain.DTO.MarcacaoResponseDTO;
 import com.insight.pontoapp.domain.DTO.ServletMessageResponse;
 import com.insight.pontoapp.domain.models.Marcacao;
-import com.insight.pontoapp.utils.JsonUtils;
-import com.insight.pontoapp.utils.JsonUtilsImpl;
+import com.insight.pontoapp.utils.json.JsonUtils;
+import com.insight.pontoapp.utils.json.JsonUtilsImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -56,8 +56,6 @@ public class MarcacoesServlet extends HttpServlet {
         Marcacao marcacao = new Marcacao(entradaManha, saidaManha, entradaTarde, saidaTarde);
         MarcacoesData.getMarcacoesData().add(marcacao);
 
-        marcacao.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
-
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_CREATED);
         PrintWriter out = response.getWriter();
@@ -83,7 +81,6 @@ public class MarcacoesServlet extends HttpServlet {
         marcacaoById.setSaidaManha(marcacaoJson.getSaidaManha());
         marcacaoById.setEntradaTarde(marcacaoJson.getEntradaTarde());
         marcacaoById.setSaidaTarde(marcacaoJson.getSaidaTarde());
-        marcacaoById.calcularAtrasoEHoraExtra(PeriodoPontoData.getPeriodoPonto());
 
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcacao editada com sucesso")));
     }
@@ -143,11 +140,9 @@ public class MarcacoesServlet extends HttpServlet {
                                         marcacao.getEntradaManha(),
                                         marcacao.getSaidaManha(),
                                         marcacao.getEntradaTarde(),
-                                        marcacao.getSaidaTarde(),
-                                        marcacao.getAtrasoFormatado(),
-                                        marcacao.getHoraExtraFormatada())
+                                        marcacao.getSaidaTarde()
                         )
-                );
+                ));
 
         return marcacaoResponseDTO;
     }
@@ -158,9 +153,7 @@ public class MarcacoesServlet extends HttpServlet {
                 marcacao.getEntradaManha(),
                 marcacao.getSaidaManha(),
                 marcacao.getEntradaTarde(),
-                marcacao.getSaidaTarde(),
-                marcacao.getAtrasoFormatado(),
-                marcacao.getHoraExtraFormatada()
+                marcacao.getSaidaTarde()
         );
     }
 
@@ -173,10 +166,7 @@ public class MarcacoesServlet extends HttpServlet {
     }
 
     private boolean hasPeriodoPonto() {
-        return PeriodoPontoData.getPeriodoPonto().getInicioManha() != null ||
-                PeriodoPontoData.getPeriodoPonto().getFimManha() != null ||
-                PeriodoPontoData.getPeriodoPonto().getInicioTarde() != null ||
-                PeriodoPontoData.getPeriodoPonto().getFimTarde() != null;
+        return !PeriodoPontoData.getPeriodoPonto().isEmpty();
     }
 
     private void deleteById(UUID id) {

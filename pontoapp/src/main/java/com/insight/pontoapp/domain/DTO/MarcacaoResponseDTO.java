@@ -9,8 +9,6 @@ public class MarcacaoResponseDTO {
     private LocalTime saidaManha;
     private LocalTime entradaTarde;
     private LocalTime saidaTarde;
-    private String atraso;
-    private String horaExtra;
 
     public MarcacaoResponseDTO() {
     }
@@ -19,16 +17,12 @@ public class MarcacaoResponseDTO {
                                LocalTime entradaManha,
                                LocalTime saidaManha,
                                LocalTime entradaTarde,
-                               LocalTime saidaTarde,
-                               String atraso,
-                               String horaExtra) {
+                               LocalTime saidaTarde) {
         this.id = id;
         this.entradaManha = entradaManha;
         this.saidaManha = saidaManha;
         this.entradaTarde = entradaTarde;
         this.saidaTarde = saidaTarde;
-        this.atraso = atraso;
-        this.horaExtra = horaExtra;
     }
 
     public UUID getId() {
@@ -71,19 +65,4 @@ public class MarcacaoResponseDTO {
         this.saidaTarde = saidaTarde;
     }
 
-    public String getAtraso() {
-        return atraso;
-    }
-
-    public void setAtraso(String atraso) {
-        this.atraso = atraso;
-    }
-
-    public String getHoraExtra() {
-        return horaExtra;
-    }
-
-    public void setHoraExtra(String horaExtra) {
-        this.horaExtra = horaExtra;
-    }
 }

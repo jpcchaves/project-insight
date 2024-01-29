@@ -6,11 +6,14 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class ObjectMapperConfig {
+public class ObjectMapperConfig implements Serializable {
+    private static final long serialVersionUID = 6300070374795355048L;
+
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
 

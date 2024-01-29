@@ -1,4 +1,4 @@
-package com.insight.pontoapp.utils;
+package com.insight.pontoapp.utils.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.insight.pontoapp.config.ObjectMapperConfig;
