@@ -68,6 +68,7 @@
             <th>Entrada</th>
             <th>Saida</th>
             <th width="20%">Editar</th>
+            <th width="20%">Excluir</th>
           </thead>
           <tbody id="periodoPontoTb"></tbody>
         </table>
@@ -277,6 +278,23 @@
           clearPeriodoSuccessMessage();
         }
 
+        function deletePeriodo(id) {
+          fetch("http://localhost:8080/pontoapp/ponto?id=" + id, {
+            method: "DELETE",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              setPeriodoSuccessMessage(response.message);
+              getData();
+              getPeriodoFormData()
+              clearPeriodoSuccessMessage();
+              editPeriodoPontoFormData = null;
+            })
+            .catch(err => {
+              console.log(err)
+            });
+        }
+
         function getPeriodoFormData() {
           clearPeriodoOverviewData()
 
@@ -296,6 +314,10 @@
                   "<td><button class='btn btn-primary' onclick='getEditPeriodoPonto(`" +
                   periodoPonto.id +
                   "`)'>Editar</button></td>";
+                  tmpData +=
+                  "<td><button class='btn btn-danger' onclick='deletePeriodo(`" +
+                  periodoPonto.id +
+                  "`)'>Deletar</button></td>";
                 tmpData += "</tr>";
 
                 let option = document.createElement('option')
@@ -389,8 +411,6 @@
               setMarcacoesSuccessMessage(response.message);
               clearMarcacoesFormData();
               getData();
-              notify(response.message)
-
             })
             .catch(err => {
               console.log(err)
@@ -431,7 +451,7 @@
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         function getData() {

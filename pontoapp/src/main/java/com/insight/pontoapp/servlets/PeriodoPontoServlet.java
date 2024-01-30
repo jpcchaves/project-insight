@@ -32,6 +32,20 @@ public class PeriodoPontoServlet extends HttpServlet {
     private final ObjectMapperConfig mapperConfig = new ObjectMapperConfig();
     private final PeriodoPontoUtils periodoPontoUtils = new PeriodoPontoUtilsImpl();
 
+    protected void doDelete(HttpServletRequest request,
+                            HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
+        String periodoPontoId = request.getParameter("id");
+        UUID periodoUUID = UUID.fromString(periodoPontoId);
+
+        deleteById(periodoUUID);
+
+        response.setContentType("application/json");
+        out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Horario apagado com sucesso!")));
+    }
+
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
@@ -128,5 +142,13 @@ public class PeriodoPontoServlet extends HttpServlet {
         if (Objects.isNull(entrada) || Objects.isNull(saida)) {
             throw new IllegalArgumentException("O período inicial e final da manhã e tarde são obrigatórios");
         }
+    }
+
+    private void deleteById(UUID id) {
+        PeriodoPontoData
+                .getPeriodoPonto()
+                .removeIf(periodo ->
+                        periodo.getId().equals(id)
+                );
     }
 }
