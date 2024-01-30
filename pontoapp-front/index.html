@@ -256,7 +256,10 @@
                 editPeriodoPontoFormData.inicioTarde,
                 editPeriodoPontoFormData.fimTarde
               );
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         async function addPeriodoPonto() {
@@ -271,7 +274,10 @@
               setPeriodoSuccessMessage(response.message);
               clearPeriodoFormData();
               getPeriodoFormData();
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         function editPeriodoPonto() {
@@ -291,7 +297,10 @@
               clearPeriodoFormData();
               getPeriodoFormData()
               editPeriodoPontoFormData = null;
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         function submitPeriodoPontoForm() {
@@ -305,7 +314,7 @@
 
         function getPeriodoFormData() {
           clearPeriodoOverviewData()
-          
+
           fetch("http://localhost:8080/pontoapp/ponto", {
             method: "GET",
           })
@@ -399,7 +408,10 @@
                 editMarcacaoFormData.saidaTarde
               );
 
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         function submitMarcacoesForm() {
@@ -424,6 +436,11 @@
               setMarcacoesSuccessMessage(response.message);
               clearMarcacoesFormData();
               getData();
+              notify(response.message)
+
+            })
+            .catch(err => {
+              console.log(err)
             });
         }
 
@@ -441,7 +458,10 @@
               clearMarcacoesFormData();
               getData();
               getPeriodoFormData()
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         function deleteMarcacao(id) {
@@ -455,7 +475,10 @@
               getPeriodoFormData()
               clearMarcacoesSuccessMessage();
               editMarcacaoFormData = null;
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         function getData() {
@@ -484,7 +507,10 @@
                 tmpData += "</tr>";
               });
               document.getElementById("tbData").innerHTML = tmpData;
-            });
+            })
+            .catch(err => {
+              console.log(err)
+            });;
         }
 
         getData();
