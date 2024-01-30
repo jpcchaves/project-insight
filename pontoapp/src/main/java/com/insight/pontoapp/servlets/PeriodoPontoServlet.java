@@ -42,7 +42,12 @@ public class PeriodoPontoServlet extends HttpServlet {
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         PeriodoPontoDTO periodoPontoJson = mapperConfig.objectMapper().readValue(requestBody, PeriodoPontoDTO.class);
 
-        validateUserInput(periodoPontoJson);
+        validateUserInput(
+                periodoPontoJson.getInicioManha(),
+                periodoPontoJson.getFimManha(),
+                periodoPontoJson.getInicioTarde(),
+                periodoPontoJson.getFimTarde()
+        );
 
         String inicioManhaStr = periodoPontoJson.getInicioManha().toString();
         String saidaManhaStr = periodoPontoJson.getFimManha().toString();
@@ -90,6 +95,14 @@ public class PeriodoPontoServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         PeriodoPontoRequestDTO periodoPontoDTO = mapperConfig.objectMapper().readValue(requestBody, PeriodoPontoRequestDTO.class);
+
+        validateUserInput(
+                periodoPontoDTO.getInicioManha(),
+                periodoPontoDTO.getFimManha(),
+                periodoPontoDTO.getInicioTarde(),
+                periodoPontoDTO.getFimTarde()
+        );
+
         PeriodoPonto periodoPonto = periodoPontoUtils.findById(periodoPontoDTO.getId());
 
         periodoPonto.setInicioManha(periodoPontoDTO.getInicioManha());
@@ -118,11 +131,11 @@ public class PeriodoPontoServlet extends HttpServlet {
         }
     }
 
-    private void validateUserInput(PeriodoPontoDTO periodoPonto) {
-        if (Objects.isNull(periodoPonto.getInicioManha()) ||
-                Objects.isNull(periodoPonto.getFimManha()) ||
-                Objects.isNull(periodoPonto.getInicioTarde()) ||
-                Objects.isNull(periodoPonto.getFimTarde())
+    private void validateUserInput(LocalTime inicioManha, LocalTime fimManha, LocalTime inicioTarde, LocalTime fimTarde) {
+        if (Objects.isNull(inicioManha) ||
+                Objects.isNull(fimManha) ||
+                Objects.isNull(inicioTarde) ||
+                Objects.isNull(fimTarde)
         ) {
             throw new IllegalArgumentException("O período inicial e final da manhã e tarde são obrigatórios");
         }

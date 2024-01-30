@@ -22,6 +22,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,13 @@ public class MarcacoesServlet extends HttpServlet {
         LocalTime entradaTarde = LocalTime.parse(entradaTardeStr, DateTimeFormatter.ofPattern("HH:mm"));
         LocalTime saidaTarde = LocalTime.parse(saidaTardeStr, DateTimeFormatter.ofPattern("HH:mm"));
 
+        validateUserInput(
+                entradaManha,
+                saidaManha,
+                entradaTarde,
+                entradaManha
+        );
+
         Marcacao marcacao = new Marcacao(entradaManha, saidaManha, entradaTarde, saidaTarde);
         MarcacoesData.getMarcacoesData().add(marcacao);
 
@@ -74,6 +82,13 @@ public class MarcacoesServlet extends HttpServlet {
 
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         MarcacaoRequestUpdateDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestUpdateDTO.class);
+
+        validateUserInput(
+                marcacaoJson.getEntradaManha(),
+                marcacaoJson.getSaidaManha(),
+                marcacaoJson.getEntradaTarde(),
+                marcacaoJson.getSaidaTarde()
+        );
 
         Marcacao marcacaoById = findById(marcacaoJson.getId());
 
@@ -126,6 +141,16 @@ public class MarcacoesServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    private void validateUserInput(LocalTime entradaManha, LocalTime saidaManha, LocalTime entradaTarde, LocalTime saidaTarde) {
+        if (Objects.isNull(entradaManha) ||
+                Objects.isNull(saidaManha) ||
+                Objects.isNull(entradaTarde) ||
+                Objects.isNull(saidaTarde)
+        ) {
+            throw new IllegalArgumentException("O período inicial e final da manhã e tarde são obrigatórios");
+        }
     }
 
     private List<MarcacaoResponseDTO> buildMarcacaoResponseDTOList() {
