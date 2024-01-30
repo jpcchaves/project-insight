@@ -27,29 +27,19 @@
         <div class="card">
           <div class="card-header">
             <h4 class="text-center">
-              Defina a Jornada de Trabalho do Funcionario
+              Horarios de Trabalho
             </h4>
           </div>
 
           <div class="card-body">
             <div class="form-group">
-              <label for="inicioManha">Inicio manhã</label>
-              <input type="time" class="form-control" id="inicioManha" placeholder="" required />
+              <label for="entradaPeriodo">Entrada</label>
+              <input type="time" class="form-control" id="entradaPeriodo" placeholder="" required />
             </div>
 
             <div class="form-group">
-              <label for="fimManha">Fim manhã</label>
-              <input type="time" name="" class="form-control" placeholder="" id="fimManha" required />
-            </div>
-
-            <div class="form-group">
-              <label for="inicioTarde">Inicio tarde</label>
-              <input type="time" name="" class="form-control" placeholder="" id="inicioTarde" required />
-            </div>
-
-            <div class="form-group">
-              <label for="fimTarde">Fim tarde</label>
-              <input type="time" name="" class="form-control" placeholder="" id="fimTarde" required />
+              <label for="saidaPeriodo">Saida</label>
+              <input type="time" name="" class="form-control" placeholder="" id="saidaPeriodo" required />
             </div>
 
             <div class="w-100">
@@ -71,15 +61,14 @@
 
       <div class="col-md-8">
         <table class="table table-bordered text-white text-center">
-          <h3 class="text-center pb-4">Jornada de Trabalho</h3>
+          <h3 class="text-center pb-4">Horarios de Trabalho</h3>
 
           <thead>
             <th>ID</th>
-            <th>Inicio Manha</th>
-            <th>Fim Manha</th>
-            <th>Inicio Tarde</th>
-            <th>Fim Tarde</th>
-            <th>Editar</th>
+            <th>Entrada</th>
+            <th>Saida</th>
+            <th width="20%">Editar</th>
+            <th width="20%">Excluir</th>
           </thead>
           <tbody id="periodoPontoTb"></tbody>
         </table>
@@ -97,23 +86,13 @@
 
           <div class="card-body">
             <div class="form-group">
-              <label for="entradaManha">Entrada manhã</label>
-              <input type="time" class="form-control" id="entradaManha" placeholder="" required />
+              <label for="entrada">Entrada</label>
+              <input type="time" class="form-control" id="entrada" placeholder="" required />
             </div>
 
             <div class="form-group">
-              <label for="saidaManha">Saida manhã</label>
-              <input type="time" name="" class="form-control" placeholder="" id="saidaManha" required />
-            </div>
-
-            <div class="form-group">
-              <label for="entradaTarde">Entrada tarde</label>
-              <input type="time" name="" class="form-control" placeholder="" id="entradaTarde" required />
-            </div>
-
-            <div class="form-group">
-              <label for="saidaTarde">Saida tarde</label>
-              <input type="time" name="" class="form-control" placeholder="" id="saidaTarde" required />
+              <label for="saida">Saida</label>
+              <input type="time" name="" class="form-control" placeholder="" id="saida" required />
             </div>
 
             <div class="w-100">
@@ -137,12 +116,10 @@
         <table class="table table-bordered text-white text-center">
           <h3 class="text-center pb-4">Marcações Feitas</h3>
           <thead>
-            <th>Entrada Manha</th>
-            <th>Saida Manha</th>
-            <th>Entrada Tarde</th>
-            <th>Saida Tarde</th>
-            <th>Editar</th>
-            <th>Excluir</th>
+            <th>Entrada</th>
+            <th>Saida</th>
+            <th width="20%">Editar</th>
+            <th width="20%">Excluir</th>
           </thead>
           <tbody id="tbData"></tbody>
         </table>
@@ -195,39 +172,30 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <script>
         // Periodo Ponto
-        var editPeriodoPontoFormData;
+        let editPeriodoPontoFormData;
 
         function getPeriodoPontoFormData() {
           return {
-            inicioManha: document.getElementById("inicioManha").value,
-            fimManha: document.getElementById("fimManha").value,
-            inicioTarde: document.getElementById("inicioTarde").value,
-            fimTarde: document.getElementById("fimTarde").value,
+            entradaPeriodo: document.getElementById("entradaPeriodo").value,
+            saidaPeriodo: document.getElementById("saidaPeriodo").value
           };
         }
 
         function clearPeriodoFormData() {
-          document.getElementById("inicioManha").value = "";
-          document.getElementById("fimManha").value = "";
-          document.getElementById("inicioTarde").value = "";
-          document.getElementById("fimTarde").value = "";
+          document.getElementById("entradaPeriodo").value = "";
+          document.getElementById("saidaPeriodo").value = "";
         }
 
         function setPeriodoFormData(
-          inicioManha,
-          fimManha,
-          inicioTarde,
-          fimTarde
+          entradaPeriodo,
+          saidaPeriodo
         ) {
-          document.getElementById("inicioManha").value = inicioManha;
-          document.getElementById("fimManha").value = fimManha;
-          document.getElementById("inicioTarde").value = inicioTarde;
-          document.getElementById("fimTarde").value = fimTarde;
+          document.getElementById("entradaPeriodo").value = entradaPeriodo;
+          document.getElementById("saidaPeriodo").value = saidaPeriodo;
         }
 
         function setPeriodoSuccessMessage(message) {
@@ -251,15 +219,13 @@
             .then((response) => {
               editPeriodoPontoFormData = response;
               setPeriodoFormData(
-                editPeriodoPontoFormData.inicioManha,
-                editPeriodoPontoFormData.fimManha,
-                editPeriodoPontoFormData.inicioTarde,
-                editPeriodoPontoFormData.fimTarde
+                editPeriodoPontoFormData.entradaPeriodo,
+                editPeriodoPontoFormData.saidaPeriodo,
               );
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         async function addPeriodoPonto() {
@@ -277,11 +243,11 @@
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         function editPeriodoPonto() {
-          var formData = getPeriodoPontoFormData();
+          let formData = getPeriodoPontoFormData();
           formData["id"] = editPeriodoPontoFormData.id;
 
           fetch("http://localhost:8080/pontoapp/ponto", {
@@ -300,7 +266,7 @@
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         function submitPeriodoPontoForm() {
@@ -312,6 +278,23 @@
           clearPeriodoSuccessMessage();
         }
 
+        function deletePeriodo(id) {
+          fetch("http://localhost:8080/pontoapp/ponto?id=" + id, {
+            method: "DELETE",
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              setPeriodoSuccessMessage(response.message);
+              getData();
+              getPeriodoFormData()
+              clearPeriodoSuccessMessage();
+              editPeriodoPontoFormData = null;
+            })
+            .catch(err => {
+              console.log(err)
+            });
+        }
+
         function getPeriodoFormData() {
           clearPeriodoOverviewData()
 
@@ -320,24 +303,26 @@
           })
             .then((res) => res.json())
             .then((response) => {
-              var selectElement = document.getElementById('jornadaSelect')
-              var tmpData = "";
+              let selectElement = document.getElementById('jornadaSelect')
+              let tmpData = "";
               response.forEach((periodoPonto, index) => {
                 tmpData += "<tr>";
                 tmpData += "<td>" + (Number(index) + 1) + "</td>";
-                tmpData += "<td>" + periodoPonto.inicioManha + "</td>";
-                tmpData += "<td>" + periodoPonto.fimManha + "</td>";
-                tmpData += "<td>" + periodoPonto.inicioTarde + "</td>";
-                tmpData += "<td>" + periodoPonto.fimTarde + "</td>";
+                tmpData += "<td>" + periodoPonto.entradaPeriodo + "</td>";
+                tmpData += "<td>" + periodoPonto.saidaPeriodo + "</td>";
                 tmpData +=
                   "<td><button class='btn btn-primary' onclick='getEditPeriodoPonto(`" +
                   periodoPonto.id +
                   "`)'>Editar</button></td>";
+                  tmpData +=
+                  "<td><button class='btn btn-danger' onclick='deletePeriodo(`" +
+                  periodoPonto.id +
+                  "`)'>Deletar</button></td>";
                 tmpData += "</tr>";
 
-                var option = document.createElement('option')
+                let option = document.createElement('option')
                 option.value = periodoPonto.id
-                option.text = "ID: " + (Number(index) + 1)
+                option.text = "Horario de trabalho referente ao ID: " + (Number(index) + 1)
 
                 selectElement.add(option)
               })
@@ -352,34 +337,26 @@
         getPeriodoFormData();
 
         // Marcacoes
-        var editMarcacaoFormData;
+        let editMarcacaoFormData;
 
         function getMarcacoesFormData() {
           return {
-            entradaManha: document.getElementById("entradaManha").value,
-            saidaManha: document.getElementById("saidaManha").value,
-            entradaTarde: document.getElementById("entradaTarde").value,
-            saidaTarde: document.getElementById("saidaTarde").value,
+            entrada: document.getElementById("entrada").value,
+            saida: document.getElementById("saida").value,
           };
         }
 
         function clearMarcacoesFormData() {
-          document.getElementById("entradaManha").value = "";
-          document.getElementById("saidaManha").value = "";
-          document.getElementById("entradaTarde").value = "";
-          document.getElementById("saidaTarde").value = "";
+          document.getElementById("entrada").value = "";
+          document.getElementById("saida").value = "";
         }
 
         function setMarcacoesFormData(
-          entradaManha,
-          saidaManha,
-          entradaTarde,
-          saidaTarde
+          entrada,
+          saida,
         ) {
-          document.getElementById("entradaManha").value = entradaManha;
-          document.getElementById("saidaManha").value = saidaManha;
-          document.getElementById("entradaTarde").value = entradaTarde;
-          document.getElementById("saidaTarde").value = saidaTarde;
+          document.getElementById("entrada").value = entrada;
+          document.getElementById("saida").value = saida;
         }
 
         function setMarcacoesSuccessMessage(message) {
@@ -402,16 +379,14 @@
             .then((response) => {
               editMarcacaoFormData = response;
               setMarcacoesFormData(
-                editMarcacaoFormData.entradaManha,
-                editMarcacaoFormData.saidaManha,
-                editMarcacaoFormData.entradaTarde,
-                editMarcacaoFormData.saidaTarde
+                editMarcacaoFormData.entrada,
+                editMarcacaoFormData.saida,
               );
 
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         function submitMarcacoesForm() {
@@ -436,8 +411,6 @@
               setMarcacoesSuccessMessage(response.message);
               clearMarcacoesFormData();
               getData();
-              notify(response.message)
-
             })
             .catch(err => {
               console.log(err)
@@ -445,7 +418,7 @@
         }
 
         async function editMarcacao() {
-          var formData = getMarcacoesFormData();
+          let formData = getMarcacoesFormData();
           formData["id"] = editMarcacaoFormData.id;
 
           await fetch("http://localhost:8080/pontoapp/marcacoes", {
@@ -461,7 +434,7 @@
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         function deleteMarcacao(id) {
@@ -478,7 +451,7 @@
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         function getData() {
@@ -487,13 +460,11 @@
           })
             .then((res) => res.json())
             .then((response) => {
-              var tmpData = "";
+              let tmpData = "";
               response.forEach((marcacao) => {
                 tmpData += "<tr>";
-                tmpData += "<td>" + marcacao.entradaManha + "</td>";
-                tmpData += "<td>" + marcacao.saidaManha + "</td>";
-                tmpData += "<td>" + marcacao.entradaTarde + "</td>";
-                tmpData += "<td>" + marcacao.saidaTarde + "</td>";
+                tmpData += "<td>" + marcacao.entrada + "</td>";
+                tmpData += "<td>" + marcacao.saida + "</td>";
 
                 tmpData +=
                   "<td><button class='btn btn-primary' onclick='getEditMarcacao(`" +
@@ -510,23 +481,23 @@
             })
             .catch(err => {
               console.log(err)
-            });;
+            });
         }
 
         getData();
 
         // overview
         function getOverview() {
-          var selectedId = document.getElementById("jornadaSelect").value;
+          let selectedId = document.getElementById("jornadaSelect").value;
 
           fetch("http://localhost:8080/pontoapp/marcacoes/overview?id=" + selectedId, {
             method: "POST"
           })
             .then(res => res.json())
             .then(response => {
-              var tbAtrasoData = '';
-              var tbHoraExtraData = '';
-              var tbSaldoData = ''
+              let tbAtrasoData = '';
+              let tbHoraExtraData = '';
+              let tbSaldoData = ''
 
               tbAtrasoData += "<tr>"
               tbAtrasoData += "<td>" + response.atraso + "</td>"
@@ -551,7 +522,7 @@
         }
 
         function clearPeriodoOverviewData() {
-          var selectElement = document.getElementById('jornadaSelect');
+          let selectElement = document.getElementById('jornadaSelect');
 
           while (selectElement.options.length > 0) {
             selectElement.remove(0);

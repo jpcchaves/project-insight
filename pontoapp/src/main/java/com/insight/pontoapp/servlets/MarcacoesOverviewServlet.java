@@ -29,7 +29,24 @@ public class MarcacoesOverviewServlet extends HttpServlet {
     private final JsonUtils jsonUtils = new JsonUtilsImpl();
     private final PeriodoPontoUtils periodoPontoUtils = new PeriodoPontoUtilsImpl();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private static String formatDuration(Duration duration) {
+        long totalHours = duration.toHours();
+        long minutes = (duration.toMinutes() - totalHours * 60);
+
+        return String.format("%02d:%02d", Math.abs(totalHours), Math.abs(minutes));
+    }
+
+    private static String formatSaldo(Duration duracao) {
+        long totalHoras = duracao.toHours();
+        long minutos = (duracao.toMinutes() - totalHoras * 60);
+
+        String sinal = duracao.isNegative() ? "-" : (duracao.isZero() ? "" : "+");
+
+        return String.format("%s%02d:%02d", sinal, Math.abs(totalHoras), Math.abs(minutos));
+    }
+
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response) throws ServletException, IOException {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json");
 
@@ -40,7 +57,8 @@ public class MarcacoesOverviewServlet extends HttpServlet {
         out.print(jsonUtils.buildJsonResponse(calcularAtrasoEHoraExtra(periodoPontoById, new MarcacoesOverviewDTO())));
     }
 
-    public MarcacoesOverviewDTO calcularAtrasoEHoraExtra(PeriodoPonto periodoPonto, MarcacoesOverviewDTO overviewDTO) {
+    public MarcacoesOverviewDTO calcularAtrasoEHoraExtra(PeriodoPonto periodoPonto,
+                                                         MarcacoesOverviewDTO overviewDTO) {
         List<Marcacao> marcacaoList = MarcacoesData.getMarcacoesData();
 
         Duration totalAtraso = Duration.ZERO;
@@ -49,18 +67,10 @@ public class MarcacoesOverviewServlet extends HttpServlet {
         Duration cargaHorariaDiaria = periodoPonto.calcularCargaHoraria();
 
         for (Marcacao marcacao : marcacaoList) {
-            LocalTime entradaManha = marcacao.getEntradaManha();
-            LocalTime saidaManha = marcacao.getSaidaManha();
-            LocalTime entradaTarde = marcacao.getEntradaTarde();
-            LocalTime saidaTarde = marcacao.getSaidaTarde();
+            LocalTime entrada = marcacao.getEntrada();
+            LocalTime saida = marcacao.getSaida();
 
-            Duration totalTrabalhado = Duration.ZERO;
-
-            Duration totalManha = calcularDiferenca(entradaManha, saidaManha);
-            totalTrabalhado = totalTrabalhado.plus(totalManha);
-
-            Duration totalTarde = calcularDiferenca(entradaTarde, saidaTarde);
-            totalTrabalhado = totalTrabalhado.plus(totalTarde);
+            Duration totalTrabalhado = calcularDiferenca(entrada, saida);
 
             if (totalTrabalhado.compareTo(cargaHorariaDiaria) > 0) {
                 totalHoraExtra = totalHoraExtra.plus(totalTrabalhado.minus(cargaHorariaDiaria));
@@ -78,23 +88,8 @@ public class MarcacoesOverviewServlet extends HttpServlet {
         return overviewDTO;
     }
 
-    private Duration calcularDiferenca(LocalTime inicio, LocalTime fim) {
+    private Duration calcularDiferenca(LocalTime inicio,
+                                       LocalTime fim) {
         return Duration.between(inicio, fim);
-    }
-
-    private static String formatDuration(Duration duration) {
-        long totalHours = duration.toHours();
-        long minutes = (duration.toMinutes() - totalHours * 60);
-
-        return String.format("%02d:%02d", Math.abs(totalHours), Math.abs(minutes));
-    }
-
-    private static String formatSaldo(Duration duracao) {
-        long totalHoras = duracao.toHours();
-        long minutos = (duracao.toMinutes() - totalHoras * 60);
-
-        String sinal = duracao.isNegative() ? "-" : (duracao.isZero() ? "" : "+");
-
-        return String.format("%s%02d:%02d", sinal, Math.abs(totalHoras), Math.abs(minutos));
     }
 }

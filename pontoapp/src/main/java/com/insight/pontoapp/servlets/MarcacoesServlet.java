@@ -44,24 +44,18 @@ public class MarcacoesServlet extends HttpServlet {
         String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         MarcacaoRequestDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestDTO.class);
 
-        String entradaStr = marcacaoJson.getEntradaManha().toString();
-        String saidaStr = marcacaoJson.getSaidaManha().toString();
-        String entradaTardeStr = marcacaoJson.getEntradaTarde().toString();
-        String saidaTardeStr = marcacaoJson.getSaidaTarde().toString();
+        String entradaStr = marcacaoJson.getEntrada().toString();
+        String saidaStr = marcacaoJson.getSaida().toString();
 
         LocalTime entradaManha = LocalTime.parse(entradaStr, DateTimeFormatter.ofPattern("HH:mm"));
         LocalTime saidaManha = LocalTime.parse(saidaStr, DateTimeFormatter.ofPattern("HH:mm"));
-        LocalTime entradaTarde = LocalTime.parse(entradaTardeStr, DateTimeFormatter.ofPattern("HH:mm"));
-        LocalTime saidaTarde = LocalTime.parse(saidaTardeStr, DateTimeFormatter.ofPattern("HH:mm"));
 
         validateUserInput(
                 entradaManha,
-                saidaManha,
-                entradaTarde,
-                entradaManha
+                saidaManha
         );
 
-        Marcacao marcacao = new Marcacao(entradaManha, saidaManha, entradaTarde, saidaTarde);
+        Marcacao marcacao = new Marcacao(entradaManha, saidaManha);
         MarcacoesData.getMarcacoesData().add(marcacao);
 
         response.setContentType("application/json");
@@ -84,18 +78,14 @@ public class MarcacoesServlet extends HttpServlet {
         MarcacaoRequestUpdateDTO marcacaoJson = mapperConfig.objectMapper().readValue(requestBody, MarcacaoRequestUpdateDTO.class);
 
         validateUserInput(
-                marcacaoJson.getEntradaManha(),
-                marcacaoJson.getSaidaManha(),
-                marcacaoJson.getEntradaTarde(),
-                marcacaoJson.getSaidaTarde()
+                marcacaoJson.getEntrada(),
+                marcacaoJson.getSaida()
         );
 
         Marcacao marcacaoById = findById(marcacaoJson.getId());
 
-        marcacaoById.setEntradaManha(marcacaoJson.getEntradaManha());
-        marcacaoById.setSaidaManha(marcacaoJson.getSaidaManha());
-        marcacaoById.setEntradaTarde(marcacaoJson.getEntradaTarde());
-        marcacaoById.setSaidaTarde(marcacaoJson.getSaidaTarde());
+        marcacaoById.setEntrada(marcacaoJson.getEntrada());
+        marcacaoById.setSaida(marcacaoJson.getSaida());
 
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Marcacao editada com sucesso")));
     }
@@ -134,7 +124,8 @@ public class MarcacoesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+    protected void doOptions(HttpServletRequest request,
+                             HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -143,11 +134,9 @@ public class MarcacoesServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    private void validateUserInput(LocalTime entradaManha, LocalTime saidaManha, LocalTime entradaTarde, LocalTime saidaTarde) {
-        if (Objects.isNull(entradaManha) ||
-                Objects.isNull(saidaManha) ||
-                Objects.isNull(entradaTarde) ||
-                Objects.isNull(saidaTarde)
+    private void validateUserInput(LocalTime entrada,
+                                   LocalTime saida) {
+        if (Objects.isNull(entrada) || Objects.isNull(saida)
         ) {
             throw new IllegalArgumentException("O período inicial e final da manhã e tarde são obrigatórios");
         }
@@ -162,12 +151,10 @@ public class MarcacoesServlet extends HttpServlet {
                         marcacao -> marcacaoResponseDTO.add(
                                 new MarcacaoResponseDTO(
                                         marcacao.getId(),
-                                        marcacao.getEntradaManha(),
-                                        marcacao.getSaidaManha(),
-                                        marcacao.getEntradaTarde(),
-                                        marcacao.getSaidaTarde()
-                        )
-                ));
+                                        marcacao.getEntrada(),
+                                        marcacao.getSaida()
+                                )
+                        ));
 
         return marcacaoResponseDTO;
     }
@@ -175,10 +162,8 @@ public class MarcacoesServlet extends HttpServlet {
     private MarcacaoResponseDTO buildMarcacaoDTO(Marcacao marcacao) {
         return new MarcacaoResponseDTO(
                 marcacao.getId(),
-                marcacao.getEntradaManha(),
-                marcacao.getSaidaManha(),
-                marcacao.getEntradaTarde(),
-                marcacao.getSaidaTarde()
+                marcacao.getEntrada(),
+                marcacao.getSaida()
         );
     }
 

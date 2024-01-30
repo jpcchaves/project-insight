@@ -3,53 +3,31 @@ package com.insight.pontoapp.domain.DTO;
 import java.time.LocalTime;
 
 public class MarcacaoRequestDTO {
-    private LocalTime entradaManha;
-    private LocalTime saidaManha;
-    private LocalTime entradaTarde;
-    private LocalTime saidaTarde;
+    private LocalTime entrada;
+    private LocalTime saida;
 
     public MarcacaoRequestDTO() {
     }
 
-    public MarcacaoRequestDTO(LocalTime entradaManha,
-                              LocalTime saidaManha,
-                              LocalTime entradaTarde,
-                              LocalTime saidaTarde) {
-        this.entradaManha = entradaManha;
-        this.saidaManha = saidaManha;
-        this.entradaTarde = entradaTarde;
-        this.saidaTarde = saidaTarde;
+    public MarcacaoRequestDTO(LocalTime entrada,
+                              LocalTime saida) {
+        this.entrada = entrada;
+        this.saida = saida;
     }
 
-    public LocalTime getEntradaManha() {
-        return entradaManha;
+    public LocalTime getEntrada() {
+        return entrada;
     }
 
-    public void setEntradaManha(LocalTime entradaManha) {
-        this.entradaManha = entradaManha;
+    public void setEntrada(LocalTime entrada) {
+        this.entrada = entrada;
     }
 
-    public LocalTime getSaidaManha() {
-        return saidaManha;
+    public LocalTime getSaida() {
+        return saida;
     }
 
-    public void setSaidaManha(LocalTime saidaManha) {
-        this.saidaManha = saidaManha;
-    }
-
-    public LocalTime getEntradaTarde() {
-        return entradaTarde;
-    }
-
-    public void setEntradaTarde(LocalTime entradaTarde) {
-        this.entradaTarde = entradaTarde;
-    }
-
-    public LocalTime getSaidaTarde() {
-        return saidaTarde;
-    }
-
-    public void setSaidaTarde(LocalTime saidaTarde) {
-        this.saidaTarde = saidaTarde;
+    public void setSaida(LocalTime saida) {
+        this.saida = saida;
     }
 }
