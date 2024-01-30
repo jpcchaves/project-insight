@@ -6,23 +6,24 @@ import java.util.UUID;
 
 public class PeriodoPonto {
     private UUID id = UUID.randomUUID();
-    private LocalTime inicioManha;
-    private LocalTime fimManha;
-    private LocalTime inicioTarde;
-    private LocalTime fimTarde;
-
+    private LocalTime entradaPeriodo;
+    private LocalTime saidaPeriodo;
 
     public PeriodoPonto() {
     }
 
-    public PeriodoPonto(LocalTime inicioManha,
-                        LocalTime fimManha,
-                        LocalTime inicioTarde,
-                        LocalTime fimTarde) {
-        this.inicioManha = inicioManha;
-        this.fimManha = fimManha;
-        this.inicioTarde = inicioTarde;
-        this.fimTarde = fimTarde;
+    public PeriodoPonto(LocalTime entradaPeriodo,
+                        LocalTime saidaPeriodo) {
+        this.entradaPeriodo = entradaPeriodo;
+        this.saidaPeriodo = saidaPeriodo;
+    }
+
+    public PeriodoPonto(UUID id,
+                        LocalTime entradaPeriodo,
+                        LocalTime saidaPeriodo) {
+        this.id = id;
+        this.entradaPeriodo = entradaPeriodo;
+        this.saidaPeriodo = saidaPeriodo;
     }
 
     public UUID getId() {
@@ -33,42 +34,23 @@ public class PeriodoPonto {
         this.id = id;
     }
 
-    public LocalTime getInicioManha() {
-        return inicioManha;
+    public LocalTime getEntradaPeriodo() {
+        return entradaPeriodo;
     }
 
-    public void setInicioManha(LocalTime inicioManha) {
-        this.inicioManha = inicioManha;
+    public void setEntradaPeriodo(LocalTime entradaPeriodo) {
+        this.entradaPeriodo = entradaPeriodo;
     }
 
-    public LocalTime getFimManha() {
-        return fimManha;
+    public LocalTime getSaidaPeriodo() {
+        return saidaPeriodo;
     }
 
-    public void setFimManha(LocalTime fimManha) {
-        this.fimManha = fimManha;
+    public void setSaidaPeriodo(LocalTime saidaPeriodo) {
+        this.saidaPeriodo = saidaPeriodo;
     }
 
-    public LocalTime getInicioTarde() {
-        return inicioTarde;
-    }
-
-    public void setInicioTarde(LocalTime inicioTarde) {
-        this.inicioTarde = inicioTarde;
-    }
-
-    public LocalTime getFimTarde() {
-        return fimTarde;
-    }
-
-    public void setFimTarde(LocalTime fimTarde) {
-        this.fimTarde = fimTarde;
-    }
     public Duration calcularCargaHoraria() {
-        Duration manhaDuration = Duration.between(inicioManha, fimManha);
-
-        Duration tardeDuration = Duration.between(inicioTarde, fimTarde);
-
-        return manhaDuration.plus(tardeDuration);
+        return Duration.between(entradaPeriodo, saidaPeriodo);
     }
 }

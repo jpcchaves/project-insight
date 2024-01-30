@@ -30,7 +30,7 @@ public class PeriodoPontoServlet extends HttpServlet {
     private static final long serialVersionUID = 151634592284318466L;
     private final JsonUtils jsonUtils = new JsonUtilsImpl();
     private final ObjectMapperConfig mapperConfig = new ObjectMapperConfig();
-    private final PeriodoPontoUtils periodoPontoUtils  = new PeriodoPontoUtilsImpl();
+    private final PeriodoPontoUtils periodoPontoUtils = new PeriodoPontoUtilsImpl();
 
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
@@ -43,23 +43,17 @@ public class PeriodoPontoServlet extends HttpServlet {
         PeriodoPontoDTO periodoPontoJson = mapperConfig.objectMapper().readValue(requestBody, PeriodoPontoDTO.class);
 
         validateUserInput(
-                periodoPontoJson.getInicioManha(),
-                periodoPontoJson.getFimManha(),
-                periodoPontoJson.getInicioTarde(),
-                periodoPontoJson.getFimTarde()
+                periodoPontoJson.getEntradaPeriodo(),
+                periodoPontoJson.getSaidaPeriodo()
         );
 
-        String inicioManhaStr = periodoPontoJson.getInicioManha().toString();
-        String saidaManhaStr = periodoPontoJson.getFimManha().toString();
-        String inicioTardeStr = periodoPontoJson.getInicioTarde().toString();
-        String saidaTardeStr = periodoPontoJson.getFimTarde().toString();
+        String inicioManhaStr = periodoPontoJson.getEntradaPeriodo().toString();
+        String saidaManhaStr = periodoPontoJson.getSaidaPeriodo().toString();
 
         LocalTime inicioManha = LocalTime.parse(inicioManhaStr, DateTimeFormatter.ofPattern("HH:mm"));
         LocalTime saidaManha = LocalTime.parse(saidaManhaStr, DateTimeFormatter.ofPattern("HH:mm"));
-        LocalTime inicioTarde = LocalTime.parse(inicioTardeStr, DateTimeFormatter.ofPattern("HH:mm"));
-        LocalTime saidaTarde = LocalTime.parse(saidaTardeStr, DateTimeFormatter.ofPattern("HH:mm"));
 
-        PeriodoPonto periodoPonto = new PeriodoPonto(inicioManha, saidaManha, inicioTarde, saidaTarde);
+        PeriodoPonto periodoPonto = new PeriodoPonto(inicioManha, saidaManha);
 
         PeriodoPontoData.getPeriodoPonto().add(periodoPonto);
 
@@ -76,7 +70,7 @@ public class PeriodoPontoServlet extends HttpServlet {
 
         String periodoPontoid = request.getParameter("id");
 
-        if(periodoPontoid != null && !periodoPontoid.isEmpty()) {
+        if (periodoPontoid != null && !periodoPontoid.isEmpty()) {
             PeriodoPonto periodoPonto = periodoPontoUtils.findById(UUID.fromString(periodoPontoid));
             out.print(jsonUtils.buildJsonResponse(periodoPonto));
             return;
@@ -85,7 +79,8 @@ public class PeriodoPontoServlet extends HttpServlet {
         out.print(jsonUtils.buildJsonResponse(PeriodoPontoData.getPeriodoPonto()));
     }
 
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request,
+                         HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -97,24 +92,21 @@ public class PeriodoPontoServlet extends HttpServlet {
         PeriodoPontoRequestDTO periodoPontoDTO = mapperConfig.objectMapper().readValue(requestBody, PeriodoPontoRequestDTO.class);
 
         validateUserInput(
-                periodoPontoDTO.getInicioManha(),
-                periodoPontoDTO.getFimManha(),
-                periodoPontoDTO.getInicioTarde(),
-                periodoPontoDTO.getFimTarde()
+                periodoPontoDTO.getEntradaPeriodo(),
+                periodoPontoDTO.getSaidaPeriodo()
         );
 
         PeriodoPonto periodoPonto = periodoPontoUtils.findById(periodoPontoDTO.getId());
 
-        periodoPonto.setInicioManha(periodoPontoDTO.getInicioManha());
-        periodoPonto.setFimManha(periodoPontoDTO.getFimManha());
-        periodoPonto.setInicioTarde(periodoPontoDTO.getInicioTarde());
-        periodoPonto.setFimTarde(periodoPontoDTO.getFimTarde());
+        periodoPonto.setEntradaPeriodo(periodoPontoDTO.getEntradaPeriodo());
+        periodoPonto.setSaidaPeriodo(periodoPontoDTO.getSaidaPeriodo());
 
         out.print(jsonUtils.buildJsonResponse(new ServletMessageResponse("Periodo de ponto atualizado com sucesso!")));
     }
 
     @Override
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+    protected void doOptions(HttpServletRequest request,
+                             HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -126,17 +118,14 @@ public class PeriodoPontoServlet extends HttpServlet {
     private void validatePeriodoPontoLimit() {
         int PERIODO_PONTO_MAX_LIMIT = 3;
 
-        if(PeriodoPontoData.getPeriodoPonto().size() >= PERIODO_PONTO_MAX_LIMIT) {
+        if (PeriodoPontoData.getPeriodoPonto().size() >= PERIODO_PONTO_MAX_LIMIT) {
             throw new IllegalArgumentException("Limite de periodos atingido!");
         }
     }
 
-    private void validateUserInput(LocalTime inicioManha, LocalTime fimManha, LocalTime inicioTarde, LocalTime fimTarde) {
-        if (Objects.isNull(inicioManha) ||
-                Objects.isNull(fimManha) ||
-                Objects.isNull(inicioTarde) ||
-                Objects.isNull(fimTarde)
-        ) {
+    private void validateUserInput(LocalTime entrada,
+                                   LocalTime saida) {
+        if (Objects.isNull(entrada) || Objects.isNull(saida)) {
             throw new IllegalArgumentException("O período inicial e final da manhã e tarde são obrigatórios");
         }
     }

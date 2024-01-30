@@ -5,24 +5,18 @@ import java.util.UUID;
 
 public class PeriodoPontoRequestDTO {
     private UUID id;
-    private LocalTime inicioManha;
-    private LocalTime fimManha;
-    private LocalTime inicioTarde;
-    private LocalTime fimTarde;
+    private LocalTime entradaPeriodo;
+    private LocalTime saidaPeriodo;
 
     public PeriodoPontoRequestDTO() {
     }
 
     public PeriodoPontoRequestDTO(UUID id,
-                                  LocalTime inicioManha,
-                                  LocalTime fimManha,
-                                  LocalTime inicioTarde,
-                                  LocalTime fimTarde) {
+                                  LocalTime entradaPeriodo,
+                                  LocalTime saidaPeriodo) {
         this.id = id;
-        this.inicioManha = inicioManha;
-        this.fimManha = fimManha;
-        this.inicioTarde = inicioTarde;
-        this.fimTarde = fimTarde;
+        this.entradaPeriodo = entradaPeriodo;
+        this.saidaPeriodo = saidaPeriodo;
     }
 
     public UUID getId() {
@@ -33,35 +27,19 @@ public class PeriodoPontoRequestDTO {
         this.id = id;
     }
 
-    public LocalTime getInicioManha() {
-        return inicioManha;
+    public LocalTime getEntradaPeriodo() {
+        return entradaPeriodo;
     }
 
-    public void setInicioManha(LocalTime inicioManha) {
-        this.inicioManha = inicioManha;
+    public void setEntradaPeriodo(LocalTime entradaPeriodo) {
+        this.entradaPeriodo = entradaPeriodo;
     }
 
-    public LocalTime getFimManha() {
-        return fimManha;
+    public LocalTime getSaidaPeriodo() {
+        return saidaPeriodo;
     }
 
-    public void setFimManha(LocalTime fimManha) {
-        this.fimManha = fimManha;
-    }
-
-    public LocalTime getInicioTarde() {
-        return inicioTarde;
-    }
-
-    public void setInicioTarde(LocalTime inicioTarde) {
-        this.inicioTarde = inicioTarde;
-    }
-
-    public LocalTime getFimTarde() {
-        return fimTarde;
-    }
-
-    public void setFimTarde(LocalTime fimTarde) {
-        this.fimTarde = fimTarde;
+    public void setSaidaPeriodo(LocalTime saidaPeriodo) {
+        this.saidaPeriodo = saidaPeriodo;
     }
 }
